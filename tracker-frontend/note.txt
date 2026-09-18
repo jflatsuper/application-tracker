@@ -1,0 +1,54 @@
+Plan for the  site
+Tracker for job applications
+functionality
+1. Track applications
+2. Upload and store cvs
+3. routing to your github and portfolio
+4. Read your gmail and linkedin to see chats
+5. Integrate agents?
+6. Manually add job applications and update status
+7. Sign in and Login in potential/register potential
+8. Possible management of leads and chats?
+
+name of the app
+Refresha?
+
+
+
+possibilities from here
+1. Auto apply for jobs
+2. Create new cvs and match jobs for applications
+3. Job Board ( expansion)?
+4. 
+
+
+Built with
+Python
+FastAPI
+React 
+Typescript
+
+Forms
+React-Forms
+yup validator
+
+
+routes
+view applications
+add new application
+edit existing application
+
+MVP feature stack
+
+
+Later changes
+
+
+Goal :
+to refresh knowledge of react,typescript,python and FastAPI
+to track jobs
+to get a job.
+to add to my portfolio
+learn a bit more about devops
+
+
