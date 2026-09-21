@@ -41,7 +41,7 @@ type ApplicationFormProps = {
   onSubmit: (data: ApplicationCreate) => void;
   defaultValues?: Partial<ApplicationCreateInput>;
 };
-const ApplicationForm = ({ onSubmit }: ApplicationFormProps) => {
+const ApplicationForm = ({ onSubmit, defaultValues }: ApplicationFormProps) => {
   const {
     register,
     handleSubmit,
@@ -49,6 +49,7 @@ const ApplicationForm = ({ onSubmit }: ApplicationFormProps) => {
   } = useForm<ApplicationCreateInput, unknown, ApplicationCreate>({
     mode: "onBlur",
     resolver: zodResolver(applicationCreateSchema),
+    defaultValues: defaultValues,
   });
   console.log(errors);
   return (

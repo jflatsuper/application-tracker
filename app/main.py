@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud
@@ -16,7 +19,16 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Job Application Tracker", lifespan=lifespan)
+app = FastAPI(title="Job Application Tracker", lifespan=lifespan,)
+origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/applications", response_model=ApplicationRead, status_code=201,)
