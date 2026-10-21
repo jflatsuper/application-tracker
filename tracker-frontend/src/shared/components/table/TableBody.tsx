@@ -8,8 +8,10 @@ const TableBody = ({ tableRowItems }: Props) => {
     <tbody>
       {tableRowItems.map((tableRow, i) => (
         <tr key={i}>
-          {tableRow.map((item) => (
-            <td key={item.label}>{item.label}</td>
+          {tableRow.map(({ label, ...cellProps }, j) => (
+            <td key={j} {...cellProps}>
+              {label}
+            </td>
           ))}
         </tr>
       ))}

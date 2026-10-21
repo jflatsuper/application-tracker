@@ -7,8 +7,14 @@ const TableHeader = ({ tableHeaders }: Props) => {
   return (
     <thead>
       <tr>
-        {tableHeaders.map(({ label }) => (
-          <th key={label}>{label}</th>
+        {tableHeaders.map(({ label, align }) => (
+          <th
+            key={label}
+            scope="col"
+            className={align === "end" ? "table__cell--end" : undefined}
+          >
+            {label}
+          </th>
         ))}
       </tr>
     </thead>

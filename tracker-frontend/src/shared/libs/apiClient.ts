@@ -3,9 +3,11 @@ export const BASE_URL =
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  detail: unknown;
+  constructor(status: number, message: string, detail?: unknown) {
     super(message);
     this.status = status;
+    this.detail = detail;
   }
 }
 
@@ -52,7 +54,7 @@ export const logout = async (): Promise<void> => {
     method: "POST",
     credentials: "include",
   }).catch(() => {
-    console.log("logout failed");
+    // Logging out locally still works if the server can't be reached.
   });
 };
 
@@ -63,6 +65,7 @@ async function request<T>(
 ): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -75,7 +78,10 @@ async function request<T>(
     onAuthFailure?.();
   }
 
-  if (!res.ok) throw new ApiError(res.status, `Request failed: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new ApiError(res.status, `Request failed: ${res.status}`, body?.detail);
+  }
   if (res.status === 204) return undefined as T;
   return res.json();
 }

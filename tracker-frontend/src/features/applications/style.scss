@@ -1,0 +1,262 @@
+$statuses: saved, applied, screening, interviewing, offer, accepted, rejected,
+  withdrawn, ghosted;
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--st-saved-bg);
+  color: var(--st-saved-fg);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+}
+
+@each $status in $statuses {
+  .status-chip--#{$status} {
+    background: var(--st-#{$status}-bg);
+    color: var(--st-#{$status}-fg);
+  }
+}
+
+.status-chip--withdrawn {
+  border-color: var(--st-withdrawn-border);
+}
+
+.status-chip--ghosted {
+  border-style: dashed;
+  border-color: var(--st-ghosted-border);
+}
+
+.applications {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.applications__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.applications__sub {
+  margin-top: 4px;
+  color: var(--text-2);
+}
+
+.applications__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-pill {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+
+  &:hover {
+    background: var(--surface-2);
+  }
+
+  &[aria-pressed="true"] {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+}
+
+.applications__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.applications__state {
+  padding: 48px 0;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.applications__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  text-align: center;
+
+  h1,
+  h2 {
+    font-size: 16px;
+  }
+
+  p {
+    color: var(--text-2);
+  }
+
+  .btn {
+    margin-top: 8px;
+  }
+}
+
+.applications__table {
+  transition: opacity var(--dur-base) var(--ease);
+
+  &.is-stale {
+    opacity: 0.6;
+  }
+}
+
+.application-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 720px;
+}
+
+.application-page__head p {
+  margin-top: 4px;
+  color: var(--text-2);
+}
+
+.application-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.application-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.application-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.application-edit__crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.application-edit__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  p {
+    color: var(--text-2);
+  }
+}
+
+.application-edit__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.application-edit__main,
+.application-edit__side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px 16px;
+}
+
+.form-grid__full {
+  grid-column: 1 / -1;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 14px;
+  border-left: 2px solid var(--border);
+}
+
+.timeline__what {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline__when {
+  color: var(--text-2);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline__note {
+  color: var(--text-2);
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.timeline__empty {
+  color: var(--text-2);
+}
