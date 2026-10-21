@@ -26,15 +26,14 @@ const statusOptions = Object.values(Status).map((v) => ({
   label: v,
 }));
 const formItems: FormInputItem<Application>[] = [
-  { label: "Company", name: "company" },
-  { label: "Role", name: "role" },
-  { label: "Track", name: "track", type: "select", options: trackOptions },
-  { label: "Tier", name: "tier", type: "number" },
-  { label: "Source", name: "source" },
+  { label: "Company", name: "company_name" },
+  { label: "Role", name: "title" },
+  // { label: "Track", name: "track", type: "select", options: trackOptions },
+  { label: "Location", name: "location" },
+  { label: "Source", name: "source_url" },
   { label: "Contact", name: "contact" },
   { label: "Status", name: "status", type: "select", options: statusOptions },
-  { label: "Date applied", name: "date_applied", type: "date" },
-  { label: "Follow up date", name: "follow_up_date", type: "date" },
+  { label: "Date applied", name: "applied_at", type: "date" },
   { label: "Notes", name: "notes" },
 ];
 type ApplicationFormProps = {

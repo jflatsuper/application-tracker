@@ -1,4 +1,5 @@
 import { apiClient } from "@/shared/libs/apiClient";
+import type { PaginatedList } from "@/types/global";
 import type {
   Application,
   ApplicationCreate,
@@ -7,10 +8,18 @@ import type {
 } from "./ApplicationSchema";
 
 export const applicationsApi = {
+  applicationBaseUrl: "/v1/applications",
   create: (data: ApplicationCreate) =>
-    apiClient.post<Application>("/applications", data),
+    apiClient.post<Application>(`${applicationsApi.applicationBaseUrl}`, data),
   update: (id: number, data: ApplicationUpdate) =>
-    apiClient.patch<Application>(`/applications/${id}`, data),
-  list: () => apiClient.get<ApplicationRead[]>("/applications"),
-  remove: (id: number) => apiClient.delete(`/applications/${id}`),
+    apiClient.patch<Application>(
+      `${applicationsApi.applicationBaseUrl}/${id}`,
+      data,
+    ),
+  list: () =>
+    apiClient.get<PaginatedList<ApplicationRead>>(
+      `${applicationsApi.applicationBaseUrl}`,
+    ),
+  remove: (id: number) =>
+    apiClient.delete(`${applicationsApi.applicationBaseUrl}/${id}`),
 };

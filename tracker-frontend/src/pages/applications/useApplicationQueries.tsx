@@ -7,6 +7,7 @@ export function useApplications(filters?: { status?: string }) {
   return useQuery({
     queryKey: applicationKeys.list(filters),
     queryFn: () => applicationsApi.list(),
+    // retry: false,
   });
 }
 

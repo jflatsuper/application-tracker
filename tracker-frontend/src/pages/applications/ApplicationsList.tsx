@@ -15,11 +15,11 @@ function ApplicationsListPage() {
   ];
   const tableBodyItems: TableRowItem[][] = useMemo(
     () =>
-      applications?.map((items) => [
-        { label: items.company },
-        { label: items.role },
-        { label: items.track },
+      applications?.items?.map((items) => [
+        { label: items.company_name },
+        { label: items.title },
         { label: items.status },
+        { label: items.location },
       ]) ?? [],
     [isLoading],
   );
