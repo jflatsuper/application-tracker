@@ -1,0 +1,65 @@
+.error-page-shell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: 32px;
+}
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 64px 0;
+  text-align: center;
+
+  @media (max-width: 640px) {
+    padding: 32px 0;
+  }
+}
+
+.error-page__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-2);
+}
+
+.error-page__code {
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.error-page__text {
+  max-width: 400px;
+  margin-top: 8px;
+  color: var(--text-2);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.error-page__detail {
+  margin-top: 16px;
+  color: var(--text-2);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}

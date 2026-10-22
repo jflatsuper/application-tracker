@@ -22,6 +22,10 @@ const headerLinks: HeaderLink[] = [
     ],
   },
   {
+    label: "Pricing",
+    to: "/pricing",
+  },
+  {
     label: "About",
     to: "/about",
     children: [

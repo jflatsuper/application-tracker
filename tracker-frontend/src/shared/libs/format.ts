@@ -1,0 +1,22 @@
+const options: Intl.DateTimeFormatOptions = {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+};
+const localFormat = new Intl.DateTimeFormat("en-GB", options);
+const utcFormat = new Intl.DateTimeFormat("en-GB", {
+  ...options,
+  timeZone: "UTC",
+});
+
+// Date-only values and dates stored at noon UTC must be read in UTC,
+// or they show as the wrong day in some timezones.
+export function formatDate(
+  value: string | null | undefined,
+  { utc = false }: { utc?: boolean } = {},
+): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return (utc ? utcFormat : localFormat).format(date);
+}
