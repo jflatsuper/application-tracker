@@ -1,0 +1,80 @@
+.parse-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.parse-method {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-2);
+  }
+
+  &[aria-pressed="true"] {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+}
+
+.parse-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.parse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.parse-key {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+
+  .btn {
+    align-self: flex-start;
+  }
+}
+
+.parse-key__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.parse-key__where {
+  color: var(--text-2);
+}
+
+.parse-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parse-note {
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.parse-note--warn {
+  color: var(--danger);
+}

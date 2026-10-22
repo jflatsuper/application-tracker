@@ -111,6 +111,15 @@ const AccountMenu = ({ user }: { user: UserRead }) => {
           </Link>
           <Link
             role="menuitem"
+            to="/profile/settings"
+            className="account-menu__item"
+            onClick={close}
+          >
+            <Icon name="sliders" />
+            Settings
+          </Link>
+          <Link
+            role="menuitem"
             to="/profile/billing"
             className="account-menu__item"
             onClick={close}

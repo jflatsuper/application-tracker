@@ -12,6 +12,7 @@ import AccountPage from "@/features/profile/pages/AccountPage";
 import BillingPage from "@/features/profile/pages/BillingPage";
 import DeveloperPage from "@/features/profile/pages/DeveloperPage";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
+import SettingsPage from "@/features/profile/pages/SettingsPage";
 import UsagePage from "@/features/profile/pages/UsagePage";
 import NotFound from "./errors/NotFound";
 import RouteError from "./errors/RouteError";
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
                 element: <ProfileLayout />,
                 children: [
                   { index: true, element: <AccountPage /> },
+                  { path: "settings", element: <SettingsPage /> },
                   { path: "billing", element: <BillingPage /> },
                   { path: "usage", element: <UsagePage /> },
                   ...(import.meta.env.DEV

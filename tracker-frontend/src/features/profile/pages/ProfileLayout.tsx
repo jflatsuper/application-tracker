@@ -18,6 +18,7 @@ type NavItem = { to: string; label: string; end?: boolean; icon: IconName };
 
 const NAV_ITEMS: NavItem[] = [
   { to: "/profile", label: "Profile", end: true, icon: "user" },
+  { to: "/profile/settings", label: "Settings", icon: "sliders" },
   { to: "/profile/billing", label: "Billing", icon: "credit-card" },
   { to: "/profile/usage", label: "Usage", icon: "chart" },
   ...(import.meta.env.DEV

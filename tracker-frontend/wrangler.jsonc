@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "refresha",
+  "compatibility_date": "2026-10-01",
+  // Folder that `wrangler pages deploy` uploads. Keep it free of a 404.html:
+  // without one, Pages serves index.html for unknown paths such as
+  // /applications/123, so React Router can handle them and show its own 404.
+  "pages_build_output_dir": "./dist"
+}

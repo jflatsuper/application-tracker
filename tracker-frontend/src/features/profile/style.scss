@@ -119,6 +119,16 @@
   align-self: flex-start;
 }
 
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-form__device {
+  align-self: flex-start;
+}
+
 .panel--dev {
   border-style: dashed;
 }

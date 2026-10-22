@@ -13,6 +13,7 @@ import logOut from "./log-out.svg?raw";
 import logo from "./logo.svg?raw";
 import minus from "./minus.svg?raw";
 import plus from "./plus.svg?raw";
+import sliders from "./sliders.svg?raw";
 import userPlus from "./user-plus.svg?raw";
 import user from "./user.svg?raw";
 
@@ -32,6 +33,7 @@ export const icons = {
   logo,
   minus,
   plus,
+  sliders,
   "user-plus": userPlus,
   user,
 } as const;

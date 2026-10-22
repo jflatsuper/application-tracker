@@ -47,11 +47,15 @@ const formItems: FormInputItem<Application>[] = [
 type ApplicationFormProps = {
   onSubmit: (data: ApplicationCreate) => void;
   defaultValues?: Partial<ApplicationCreateInput>;
+  // Draft values (for example from a parsed job posting). They fill the
+  // fields the user hasn't typed in, and never overwrite their own edits.
+  prefill?: Partial<ApplicationCreateInput>;
   isSaving?: boolean;
 };
 const ApplicationForm = ({
   onSubmit,
   defaultValues,
+  prefill,
   isSaving = false,
 }: ApplicationFormProps) => {
   const {
@@ -62,6 +66,16 @@ const ApplicationForm = ({
     mode: "onBlur",
     resolver: zodResolver(applicationCreateSchema),
     defaultValues: { status: "applied", tier: 0, ...defaultValues },
+    values: prefill && {
+      company_name: "",
+      title: "",
+      location: "",
+      status: "applied",
+      tier: 0,
+      ...defaultValues,
+      ...prefill,
+    },
+    resetOptions: { keepDirtyValues: true },
   });
   return (
     <form
