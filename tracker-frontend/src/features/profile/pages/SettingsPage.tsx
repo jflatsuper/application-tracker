@@ -1,4 +1,5 @@
 import Alert from "@/shared/components/Alert";
+import PushSettings from "@/features/notifications/components/PushSettings";
 import ProfileSection from "../components/ProfileSection";
 import SettingsForm from "../components/SettingsForm";
 import { useSettings } from "../hooks/useSettings";
@@ -33,6 +34,8 @@ const SettingsPage = () => {
       )}
 
       {data && <SettingsForm settings={data} />}
+
+      <PushSettings />
     </ProfileSection>
   );
 };

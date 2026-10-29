@@ -18,7 +18,19 @@ export const notificationApi = {
       ids: ids ?? null,
     }),
   dismiss: (id: string) => apiClient.delete(`${notificationApi.base}/${id}`),
+  // Served by the API so rotating the VAPID pair needs no frontend rebuild.
+  pushPublicKey: () =>
+    apiClient.get<{ public_key: string }>(
+      `${notificationApi.base}/push/public-key`,
+    ),
+  pushSubscribe: (subscription: PushSubscriptionBody) =>
+    apiClient.post<void>(`${notificationApi.base}/push/subscribe`, subscription),
 };
+
+export interface PushSubscriptionBody {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+}
 
 export const announcementApi = {
   base: "/v1/announcements",

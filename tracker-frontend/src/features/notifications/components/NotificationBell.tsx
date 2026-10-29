@@ -3,7 +3,9 @@ import { useNavigate } from "react-router";
 import Icon from "@/shared/components/Icon";
 import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
 import { timeAgo } from "@/shared/libs/format";
-import { describeNotification } from "../notificationText";
+import { useNotificationToasts } from "../hooks/useNotificationToasts";
+import { usePushState, useResyncPush } from "../hooks/usePush";
+import { TONE_ICONS, describeNotification } from "../notificationText";
 import type { Notification } from "../types";
 import {
   useDismissNotification,
@@ -18,6 +20,7 @@ const MAX_BADGE = 9;
 
 const NotificationBell = () => {
   useNotificationStream();
+  useResyncPush();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -28,7 +31,8 @@ const NotificationBell = () => {
   useDismissOnOutside(open, close, rootRef, triggerRef);
 
   const { data: unread = 0 } = useUnreadCount();
-  const feed = useNotificationFeed(open);
+  // Always loaded, so new arrivals can be announced as toasts.
+  const feed = useNotificationFeed(true);
   const markRead = useMarkNotificationsRead();
   const dismiss = useDismissNotification();
 
@@ -42,6 +46,10 @@ const NotificationBell = () => {
   };
 
   const items = feed.data?.items ?? [];
+  // With browser notifications on, the browser shows its own; the toast is for
+  // everyone else, who would otherwise get no signal while the app is open.
+  const { data: pushState } = usePushState();
+  useNotificationToasts(feed.data?.items, openItem, pushState !== "on");
 
   return (
     <div className="notification-bell" ref={rootRef}>
@@ -102,28 +110,38 @@ const NotificationBell = () => {
           ) : (
             <ul className="notification-panel__list">
               {items.map((item) => {
-                const { title, body } = describeNotification(item);
+                const { title, body, tone } = describeNotification(item);
                 return (
                   <li
                     key={item.id}
                     className="notification-item"
                     data-unread={!item.read_at}
+                    data-tone={tone}
                   >
                     <button
                       type="button"
                       className="notification-item__main"
                       onClick={() => openItem(item)}
                     >
-                      <span className="notification-item__title">{title}</span>
-                      {body && (
-                        <span className="notification-item__body">{body}</span>
-                      )}
-                      <time
-                        className="notification-item__time"
-                        dateTime={item.created_at}
-                      >
-                        {timeAgo(item.created_at)}
-                      </time>
+                      <span className="notification-item__icon">
+                        <Icon name={TONE_ICONS[tone]} size={16} />
+                      </span>
+                      <span className="notification-item__text">
+                        <span className="notification-item__title">
+                          {title}
+                        </span>
+                        {body && (
+                          <span className="notification-item__body">
+                            {body}
+                          </span>
+                        )}
+                        <time
+                          className="notification-item__time"
+                          dateTime={item.created_at}
+                        >
+                          {timeAgo(item.created_at)}
+                        </time>
+                      </span>
                     </button>
                     <button
                       type="button"

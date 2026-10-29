@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { Navigate, createBrowserRouter } from "react-router";
 import ApplicationsListPage from "@/features/applications/pages/ApplicationsListPage";
 import CreateApplicationPage from "@/features/applications/pages/CreateApplicationPage";
 import EditApplicationPage from "@/features/applications/pages/EditApplicationPage";
@@ -42,6 +42,11 @@ export const router = createBrowserRouter([
                   { path: "create", element: <CreateApplicationPage /> },
                   { path: ":applicationId", element: <EditApplicationPage /> },
                 ],
+              },
+              // Push notifications link to /billing; the page lives under profile.
+              {
+                path: "billing",
+                element: <Navigate to="/profile/billing" replace />,
               },
               {
                 path: "profile",

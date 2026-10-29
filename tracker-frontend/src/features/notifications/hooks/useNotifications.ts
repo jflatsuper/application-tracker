@@ -63,16 +63,29 @@ export function useDismissAnnouncement() {
 
 // Keeps the badge, feed and announcements fresh while signed in. Nothing is
 // polled: the server's nudge is the only trigger (plus the one fired on every
-// reconnect, which catches anything missed while the stream was down).
+// reconnect, which catches anything missed while the stream was down), and a
+// push forwarded by the service worker.
 export function useNotificationStream() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const controller = new AbortController();
-    void listenForNudges(() => {
+    const refresh = () => {
       void queryClient.invalidateQueries({ queryKey: notificationKeys.all });
       void queryClient.invalidateQueries({ queryKey: announcementKeys.all });
-    }, controller.signal);
-    return () => controller.abort();
+    };
+
+    const controller = new AbortController();
+    void listenForNudges(refresh, controller.signal);
+
+    // The service worker forwards pushes that arrive while a tab is open.
+    const onMessage = (event: MessageEvent) => {
+      if (event.data?.type === "nudge") refresh();
+    };
+    navigator.serviceWorker?.addEventListener("message", onMessage);
+
+    return () => {
+      controller.abort();
+      navigator.serviceWorker?.removeEventListener("message", onMessage);
+    };
   }, [queryClient]);
 }

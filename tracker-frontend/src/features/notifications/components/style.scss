@@ -153,8 +153,8 @@
 .notification-item__main {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: flex-start;
+  gap: 12px;
   min-width: 0;
   padding: 12px 8px 12px 16px;
   border: 0;
@@ -166,6 +166,41 @@
 
   &:hover {
     background: var(--surface-2);
+  }
+}
+
+.notification-item__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+// One colour pair per tone, shared by the feed icon and the toast accent.
+.notification-item__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+
+  [data-tone="danger"] & {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+
+  [data-tone="warning"] & {
+    background: var(--warning-soft);
+    color: var(--warning);
+  }
+
+  [data-tone="success"] & {
+    background: var(--st-offer-bg);
+    color: var(--st-offer-fg);
   }
 }
 
@@ -299,5 +334,46 @@
   &:hover {
     background: rgb(0 0 0 / 0.06);
     color: var(--text);
+  }
+}
+
+.notification-toast.Toastify__toast {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-pop);
+  cursor: pointer;
+}
+
+.notification-toast--danger.Toastify__toast {
+  border-left-color: var(--danger);
+  --toastify-icon-color-error: var(--danger);
+}
+
+.notification-toast--warning.Toastify__toast {
+  border-left-color: var(--warning);
+  --toastify-icon-color-warning: var(--warning);
+}
+
+.notification-toast--success.Toastify__toast {
+  border-left-color: var(--st-offer-fg);
+  --toastify-icon-color-success: var(--st-offer-fg);
+}
+
+.notification-toast--info.Toastify__toast {
+  --toastify-icon-color-info: var(--accent);
+}
+
+.notification-toast__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.4;
+
+  span {
+    color: var(--text-2);
+    font-size: 13px;
   }
 }
