@@ -5,11 +5,14 @@ import { Link, NavLink, useNavigate } from "react-router";
 import type { AuthNavOption, HeaderLink } from "@/types/layout";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import AccountMenu from "./AccountMenu";
+import MobileNav from "./MobileNav";
+import NotificationBell from "@/features/notifications/components/NotificationBell";
 import Icon from "@/shared/components/Icon";
 const DefaultHeader: FC = () => {
   return (
     <header className="default-header-nav">
       <nav className="default-header" aria-label="Main">
+        <MobileNav />
         <Link to="/" className="default-header__brand">
           <Icon name="logo" size={22} />
           Refresha
@@ -32,6 +35,7 @@ const AccountSection = () => {
   if (status === "authenticated" && user) {
     return (
       <div className="default-header-account">
+        <NotificationBell />
         <AccountMenu user={user} />
       </div>
     );
@@ -41,18 +45,26 @@ const AccountSection = () => {
     status === "unauthenticated"
       ? [
           { label: "Sign in", onClick: () => navigate("/login") },
-          { label: "Continue as Guest", onClick: continueAsGuest },
+          {
+            label: "Continue as Guest",
+            onClick: continueAsGuest,
+            className: "default-header-btn--wide",
+          },
         ]
       : [];
 
   return (
     <div className="default-header-account">
       <div className="default-header-account__actions">
-        {options.map(({ label, onClick }) => (
+        {options.map(({ label, onClick, className }) => (
           <button
             key={label}
             type="button"
-            className="default-header-btn"
+            className={
+              className
+                ? `default-header-btn ${className}`
+                : "default-header-btn"
+            }
             onClick={onClick}
           >
             {label}

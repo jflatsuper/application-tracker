@@ -60,22 +60,28 @@ function ApplicationsListPage() {
             {application.company_name}
           </Link>
         ),
-        className: "table__cell--strong",
+        className: "table__cell--strong cell-company",
       },
-      { label: application.title },
+      { label: application.title, className: "cell-role" },
       application.location
-        ? { label: application.location }
-        : { label: "Not set", className: "table__cell--muted" },
-      { label: <StatusChip status={application.status} /> },
+        ? { label: application.location, className: "cell-location" }
+        : {
+            label: "Not set",
+            className: "table__cell--muted cell-location",
+          },
+      {
+        label: <StatusChip status={application.status} />,
+        className: "cell-status",
+      },
       applied
-        ? { label: applied, className: "table__cell--end" }
+        ? { label: applied, className: "table__cell--end cell-date" }
         : {
             label: "Not applied",
-            className: "table__cell--end table__cell--muted",
+            className: "table__cell--end table__cell--muted cell-date cell-date--empty",
           },
       {
         label: formatDate(application.updated_at),
-        className: "table__cell--end",
+        className: "table__cell--end cell-date",
       },
     ];
   });
@@ -142,7 +148,11 @@ function ApplicationsListPage() {
     return (
       <>
         <div
-          className={isPlaceholderData ? "applications__table is-stale" : ""}
+          className={
+            isPlaceholderData
+              ? "applications__table is-stale"
+              : "applications__table"
+          }
           aria-busy={isPlaceholderData}
         >
           <Table

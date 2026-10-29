@@ -20,3 +20,22 @@ export function formatDate(
   if (Number.isNaN(date.getTime())) return null;
   return (utc ? utcFormat : localFormat).format(date);
 }
+
+const relative = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
+  ["day", 86_400_000],
+  ["hour", 3_600_000],
+  ["minute", 60_000],
+];
+
+// "5 minutes ago" for recent timestamps, a plain date once it's over a week old.
+export function timeAgo(value: string, now = Date.now()): string {
+  const then = new Date(value).getTime();
+  if (Number.isNaN(then)) return "";
+  const diff = then - now;
+  if (Math.abs(diff) > 7 * 86_400_000) return formatDate(value) ?? "";
+  for (const [unit, ms] of UNITS) {
+    if (Math.abs(diff) >= ms) return relative.format(Math.round(diff / ms), unit);
+  }
+  return "just now";
+}

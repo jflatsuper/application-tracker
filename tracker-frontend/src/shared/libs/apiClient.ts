@@ -24,6 +24,8 @@ const SESSION_HINT = "has_session";
 export const hasSessionHint = () => localStorage.getItem(SESSION_HINT) === "1";
 export const markSessionHint = () => localStorage.setItem(SESSION_HINT, "1");
 
+export const getAccessToken = () => accessToken;
+
 export function setAccessToken(token: string | null) {
   accessToken = token;
   if (token) markSessionHint();

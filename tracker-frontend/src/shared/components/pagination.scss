@@ -41,3 +41,10 @@
 .pagination__gap {
   padding: 0 4px;
 }
+
+@media (max-width: 640px) {
+  .pagination__btn {
+    min-width: 40px;
+    height: 40px;
+  }
+}

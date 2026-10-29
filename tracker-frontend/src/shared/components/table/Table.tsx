@@ -14,7 +14,7 @@ const Table = ({ tableHeaders, tableRowItems, caption }: Props) => {
       <table className="table">
         {caption && <caption className="visually-hidden">{caption}</caption>}
         <TableHeader tableHeaders={tableHeaders} />
-        <TableBody tableRowItems={tableRowItems} />
+        <TableBody tableHeaders={tableHeaders} tableRowItems={tableRowItems} />
       </table>
     </div>
   );

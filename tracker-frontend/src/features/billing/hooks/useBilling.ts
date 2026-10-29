@@ -30,6 +30,7 @@ export function useEntitlements(enabled = true) {
     queryKey: billingKeys.entitlements(),
     queryFn: billingApi.entitlements,
     enabled,
+    refetchOnWindowFocus: false,
   });
 }
 

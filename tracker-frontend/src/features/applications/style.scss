@@ -87,6 +87,124 @@ $statuses: saved, applied, screening, interviewing, offer, accepted, rejected,
   }
 }
 
+// On a phone the table becomes a stack of cards: company and status on top,
+// then role, location and the two dates. The whole card is the link.
+@media (max-width: 640px) {
+  .applications__filters {
+    flex-wrap: nowrap;
+    margin: 0 -16px;
+    padding: 0 16px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .filter-pill {
+    flex: none;
+    height: 36px;
+  }
+
+  .applications__table {
+    .table-wrap {
+      overflow: visible;
+      border: 0;
+      background: none;
+    }
+
+    .table {
+      display: block;
+      min-width: 0;
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      tr {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4px 12px;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
+        background: var(--surface);
+      }
+
+      td,
+      tbody tr:hover td {
+        height: auto;
+        padding: 0;
+        border: 0;
+        background: none;
+        text-align: left;
+      }
+
+      .cell-company {
+        grid-column: 1;
+      }
+
+      .cell-status {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+      }
+
+      .cell-role,
+      .cell-location {
+        grid-column: 1 / -1;
+      }
+
+      .cell-location {
+        color: var(--text-2);
+        font-size: 13px;
+      }
+
+      .cell-date {
+        grid-row: 4;
+        padding-top: 6px;
+        color: var(--text-2);
+        font-size: 12px;
+
+        &:nth-of-type(5) {
+          grid-column: 1;
+        }
+
+        &:nth-of-type(6) {
+          grid-column: 2;
+          text-align: right;
+        }
+
+        &::before {
+          content: attr(data-label) " ";
+        }
+      }
+
+      .cell-date--empty::before {
+        content: none;
+      }
+
+      .table__link::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+    }
+  }
+}
+
 .applications__stack {
   display: flex;
   flex-direction: column;
@@ -152,6 +270,12 @@ $statuses: saved, applied, screening, interviewing, offer, accepted, rejected,
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   background: var(--surface);
+}
+
+@media (max-width: 640px) {
+  .application-form {
+    padding: 16px;
+  }
 }
 
 .application-form__actions {

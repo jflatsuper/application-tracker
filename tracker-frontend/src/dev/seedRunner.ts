@@ -1,19 +1,31 @@
 import { applicationsApi } from "@/features/applications/api/applicationApi";
 import { atNoonUtc } from "@/features/applications/applicationFormValues";
+import { settingsApi } from "@/features/profile/api/settingsApi";
+import { deviceTimeZone } from "@/features/profile/settingsForm";
 import { ApiError } from "@/shared/libs/apiClient";
-import { generateSeed } from "./seedData";
+import { generateDigestSeed } from "./seedDigestData";
+import { generateSeed, type SeedRecord } from "./seedData";
 import {
   HISTORY_EVENTS,
   buildHistoryEvents,
   generateHistorySeed,
   type HistoryPlan,
 } from "./seedHistoryData";
+import {
+  clearSettingsBackup,
+  hasSettingsBackup,
+  pickChanged,
+  readSettingsBackup,
+  writeSettingsBackup,
+} from "./settingsBackup";
 
 const STORAGE_KEY = "seeded-application-ids";
 const BATCH_SIZE = 5;
 const HISTORY_BATCH_SIZE = 2;
 
 type Progress = (done: number, total: number) => void;
+
+export { hasSettingsBackup };
 
 export function readSeededIds(): string[] {
   try {
@@ -32,8 +44,7 @@ function writeSeededIds(ids: string[]) {
   }
 }
 
-export async function seedApplications(onProgress: Progress) {
-  const records = generateSeed();
+async function createRecords(records: SeedRecord[], onProgress: Progress) {
   const ids = readSeededIds();
   let done = 0;
   let failed = 0;
@@ -60,6 +71,41 @@ export async function seedApplications(onProgress: Progress) {
   }
 
   return { created: records.length - failed, failed };
+}
+
+export const seedApplications = (onProgress: Progress) =>
+  createRecords(generateSeed(), onProgress);
+
+// Makes this account have a digest to send today: the digest is switched to
+// daily (a daily digest is due every day, whichever way the API numbers
+// weekdays) in the device's timezone, and a few applications get follow-ups
+// that are due, overdue or coming up. The settings it replaces are saved so
+// removing the seeded data can put them back.
+export async function seedDigestDue(onProgress: Progress) {
+  const desired = {
+    digest_frequency: "daily",
+    timezone: deviceTimeZone(),
+  } as const;
+
+  let settingsReady = false;
+  try {
+    const current = await settingsApi.get();
+    const original = pickChanged(current, desired);
+    if (Object.keys(original).length > 0) {
+      // Keep the first backup: repeat seeds shouldn't overwrite the true original.
+      if (!readSettingsBackup()) writeSettingsBackup(original);
+      await settingsApi.update(desired);
+    }
+    settingsReady = true;
+  } catch {
+    // Reported to the caller through settingsReady.
+  }
+
+  const { created, failed } = await createRecords(
+    generateDigestSeed(),
+    onProgress,
+  );
+  return { created, failed, settingsReady, timezone: desired.timezone };
 }
 
 // Creates the application, then replays its history in date order.
@@ -145,5 +191,22 @@ export async function removeSeeded(onProgress: Progress) {
   }
 
   writeSeededIds(remaining);
-  return { removed: ids.length - remaining.length, failed: remaining.length };
+
+  let settingsRestored = false;
+  const backup = readSettingsBackup();
+  if (backup) {
+    try {
+      await settingsApi.update(backup);
+      clearSettingsBackup();
+      settingsRestored = true;
+    } catch {
+      // Leave the backup in place so a later attempt can restore it.
+    }
+  }
+
+  return {
+    removed: ids.length - remaining.length,
+    failed: remaining.length,
+    settingsRestored,
+  };
 }
