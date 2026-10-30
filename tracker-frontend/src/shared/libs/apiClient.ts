@@ -1,13 +1,23 @@
+import { parseRetryAfter } from "./retryAfter";
+
 export const BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api";
 
 export class ApiError extends Error {
   status: number;
   detail: unknown;
-  constructor(status: number, message: string, detail?: unknown) {
+  // Seconds the server asked us to wait (429 responses).
+  retryAfter?: number;
+  constructor(
+    status: number,
+    message: string,
+    detail?: unknown,
+    retryAfter?: number,
+  ) {
     super(message);
     this.status = status;
     this.detail = detail;
+    this.retryAfter = retryAfter;
   }
 }
 
@@ -82,7 +92,12 @@ async function request<T>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    throw new ApiError(res.status, `Request failed: ${res.status}`, body?.detail);
+    throw new ApiError(
+      res.status,
+      `Request failed: ${res.status}`,
+      body?.detail,
+      res.status === 429 ? parseRetryAfter(res.headers) : undefined,
+    );
   }
   if (res.status === 204) return undefined as T;
   return res.json();

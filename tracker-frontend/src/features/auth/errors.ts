@@ -1,4 +1,5 @@
 import { ApiError } from "@/shared/libs/apiClient";
+import { retryHint } from "@/shared/libs/retryAfter";
 
 type AuthAction = "login" | "register";
 
@@ -10,7 +11,7 @@ export function authErrorMessage(error: unknown, action: AuthAction): string {
     return "Check the highlighted fields and try again.";
   }
   if (error.status === 429) {
-    return "Too many attempts. Wait a moment and try again.";
+    return `Too many attempts. ${retryHint(error.retryAfter, "Wait a moment and try again.")}`;
   }
   if (error.status >= 500) {
     return "Something went wrong on our side. Try again in a moment.";

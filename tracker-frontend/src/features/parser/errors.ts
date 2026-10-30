@@ -1,4 +1,5 @@
 import { ApiError } from "@/shared/libs/apiClient";
+import { retryHint } from "@/shared/libs/retryAfter";
 import { AnthropicError } from "./byok/anthropic";
 
 export type ParseMethod = "link" | "refresha" | "own";
@@ -14,7 +15,7 @@ export function parseErrorMessage(error: unknown, method: ParseMethod): string {
       return "Anthropic rejected that key. Check it, or remove it and add it again.";
     }
     if (error.status === 429) {
-      return "Anthropic is rate limiting this key. Wait a moment and try again.";
+      return `Anthropic is rate limiting this key. ${retryHint(error.retryAfter, "Wait a moment and try again.")}`;
     }
     if (error.status === 402 || /credit|billing/i.test(error.message)) {
       return "That Anthropic account has no credit left.";
@@ -31,7 +32,9 @@ export function parseErrorMessage(error: unknown, method: ParseMethod): string {
         ? "Enter a full link, starting with https://"
         : "Paste at least 50 characters of the job posting.";
     }
-    if (error.status === 429) return "Too many requests. Wait a moment and try again.";
+    if (error.status === 429) {
+      return `Too many requests. ${retryHint(error.retryAfter, "Wait a moment and try again.")}`;
+    }
     if (error.status >= 500) return "Something went wrong on our side. Try again in a moment.";
     if (typeof error.detail === "string" && error.detail.length <= 200) {
       return error.detail;
