@@ -1,8 +1,9 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { UserRead } from "@/features/auth/types";
 import Icon from "@/shared/components/Icon";
+import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
 
 const initialsOf = (label: string) =>
   label
@@ -24,29 +25,12 @@ const AccountMenu = ({ user }: { user: UserRead }) => {
     ? "Guest"
     : user.full_name?.trim() || user.email || "Account";
 
+  const close = useCallback(() => setOpen(false), []);
+  useDismissOnOutside(open, close, rootRef, triggerRef);
+
   useEffect(() => {
     if (!open) return;
-
-    menuRef.current
-      ?.querySelector<HTMLElement>('[role="menuitem"]')
-      ?.focus();
-
-    const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
+    menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
   }, [open]);
 
   const moveFocus = (event: React.KeyboardEvent) => {
@@ -66,8 +50,6 @@ const AccountMenu = ({ user }: { user: UserRead }) => {
             : (index - 1 + items.length) % items.length;
     items[next]?.focus();
   };
-
-  const close = () => setOpen(false);
 
   return (
     <div className="account-menu" ref={rootRef}>

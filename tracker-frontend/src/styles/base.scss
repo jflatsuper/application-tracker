@@ -218,6 +218,22 @@ button {
   border: 0;
 }
 
+@media (max-width: 640px) {
+  // iOS Safari zooms the page when a field under 16px takes focus.
+  .field__input {
+    font-size: 16px;
+  }
+
+  // Bigger touch targets, and a little more room for content.
+  .btn {
+    height: 44px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

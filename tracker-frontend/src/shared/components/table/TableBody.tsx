@@ -1,15 +1,16 @@
-import type { TableRowItem } from "@/types/table";
+import type { TableHeading, TableRowItem } from "@/types/table";
 
 type Props = {
+  tableHeaders: TableHeading[];
   tableRowItems: TableRowItem[][];
 };
-const TableBody = ({ tableRowItems }: Props) => {
+const TableBody = ({ tableHeaders, tableRowItems }: Props) => {
   return (
     <tbody>
       {tableRowItems.map((tableRow, i) => (
         <tr key={i}>
           {tableRow.map(({ label, ...cellProps }, j) => (
-            <td key={j} {...cellProps}>
+            <td key={j} data-label={tableHeaders[j]?.label} {...cellProps}>
               {label}
             </td>
           ))}

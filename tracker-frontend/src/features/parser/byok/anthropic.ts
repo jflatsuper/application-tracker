@@ -1,3 +1,4 @@
+import { parseRetryAfter } from "@/shared/libs/retryAfter";
 import type { ParsedPosting, ParsePrompt } from "../types";
 import { normalizeParsed } from "./normalize";
 
@@ -6,9 +7,12 @@ const TOOL_NAME = "record_job_posting";
 
 export class AnthropicError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  // Seconds Anthropic asked us to wait (429 responses).
+  retryAfter?: number;
+  constructor(status: number, message: string, retryAfter?: number) {
     super(message);
     this.status = status;
+    this.retryAfter = retryAfter;
   }
 }
 
@@ -67,6 +71,7 @@ export async function parseWithOwnKey({
     throw new AnthropicError(
       response.status,
       typeof message === "string" ? message : `Request failed: ${response.status}`,
+      response.status === 429 ? parseRetryAfter(response.headers) : undefined,
     );
   }
 
