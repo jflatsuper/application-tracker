@@ -4,13 +4,18 @@ import CreateApplicationPage from "@/features/applications/pages/CreateApplicati
 import EditApplicationPage from "@/features/applications/pages/EditApplicationPage";
 import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { AuthComplete } from "@/features/auth/pages/Complete";
+import ForgotPassword from "@/features/auth/pages/ForgotPassword";
 import Login from "@/features/auth/pages/Login";
 import Register from "@/features/auth/pages/Register";
+import ResetPassword from "@/features/auth/pages/ResetPassword";
+import VerifyEmail from "@/features/auth/pages/VerifyEmail";
 import { SUPPORT_EMAIL } from "@/constants/site";
 import ContactPage from "@/features/legal/pages/ContactPage";
 import PrivacyPage from "@/features/legal/pages/PrivacyPage";
 import TermsPage from "@/features/legal/pages/TermsPage";
 import NotificationsPage from "@/features/notifications/pages/NotificationsPage";
+import CheckoutCancelledPage from "@/features/billing/pages/CheckoutCancelledPage";
+import CheckoutSuccessPage from "@/features/billing/pages/CheckoutSuccessPage";
 import PricingPage from "@/features/billing/pages/PricingPage";
 import HomePage from "@/features/home/pages/HomePage";
 import AccountPage from "@/features/profile/pages/AccountPage";
@@ -35,6 +40,9 @@ export const router = createBrowserRouter([
           { index: true, element: <HomePage /> },
           { path: "login", element: <Login /> },
           { path: "register", element: <Register /> },
+          { path: "forgot-password", element: <ForgotPassword /> },
+          { path: "reset-password", element: <ResetPassword /> },
+          { path: "verify-email", element: <VerifyEmail /> },
           { path: "pricing", element: <PricingPage /> },
           { path: "auth/complete", element: <AuthComplete /> },
           { path: "privacy", element: <PrivacyPage /> },
@@ -52,6 +60,9 @@ export const router = createBrowserRouter([
                 ],
               },
               { path: "notifications", element: <NotificationsPage /> },
+              // Where the payment provider sends people back after checkout.
+              { path: "billing/success", element: <CheckoutSuccessPage /> },
+              { path: "billing/cancelled", element: <CheckoutCancelledPage /> },
               // Push notifications link to /billing; the page lives under profile.
               {
                 path: "billing",

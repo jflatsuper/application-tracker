@@ -94,6 +94,9 @@ function Login() {
               error={errors.password?.message}
               {...register("password")}
             />
+            <Link to="/forgot-password" className="auth-form__forgot">
+              Forgot password?
+            </Link>
             <button type="submit" className="btn btn--primary">
               {isSubmitting ? "Signing in…" : "Sign in"}
             </button>

@@ -1,4 +1,5 @@
 import { ApiError } from "@/shared/libs/apiClient";
+import { UNAVAILABLE_MESSAGE, isUnavailable } from "@/shared/libs/apiAvailability";
 import { retryHint } from "@/shared/libs/retryAfter";
 
 type AuthAction = "login" | "register";
@@ -23,4 +24,32 @@ export function authErrorMessage(error: unknown, action: AuthAction): string {
     return "That email and password don't match. Check them and try again.";
   }
   return "Couldn't create your account. Check your details and try again.";
+}
+
+type FlowAction = "forgot" | "reset" | "verify" | "resend";
+
+const NETWORK = "Couldn't reach the server. Check your connection and try again.";
+
+// Messages for the password-reset and email-verification screens.
+export function authFlowErrorMessage(error: unknown, action: FlowAction): string {
+  if (!(error instanceof ApiError)) return NETWORK;
+  if (isUnavailable(error)) return UNAVAILABLE_MESSAGE;
+  if (error.status === 429) {
+    return `Too many attempts. ${retryHint(error.retryAfter, "Wait a moment and try again.")}`;
+  }
+  if (error.status >= 500) {
+    return "Something went wrong on our side. Try again in a moment.";
+  }
+  switch (action) {
+    case "forgot":
+      return "Enter a valid email address and try again.";
+    case "reset":
+      return error.status === 422
+        ? "Choose a password of at least 8 characters."
+        : "This reset link is invalid or has expired. Request a new one.";
+    case "verify":
+      return "This verification link is invalid or has expired. Request a new one.";
+    case "resend":
+      return "Couldn't send the email. Try again in a moment.";
+  }
 }

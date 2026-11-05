@@ -191,3 +191,47 @@
   font-size: 13px;
   text-align: center;
 }
+
+// Where the payment provider sends people back to.
+.result-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 64px 0;
+  text-align: center;
+
+  @media (max-width: 640px) {
+    padding: 32px 0;
+  }
+}
+
+.result-page__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.result-page__text {
+  max-width: 400px;
+  margin-top: 8px;
+  color: var(--text-2);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.result-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}

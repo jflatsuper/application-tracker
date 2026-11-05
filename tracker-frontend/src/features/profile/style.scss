@@ -247,3 +247,10 @@
     display: none;
   }
 }
+
+.your-data__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 360px;
+}

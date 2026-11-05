@@ -94,15 +94,14 @@ const PrivacyPage = () => (
           <Link to="/profile/settings">Settings</Link>, or in your browser.
         </li>
         <li>
-          Ask for a copy of your data, a correction or deletion of your
-          account{SUPPORT_EMAIL ? (
+          Download your data or delete your account from{" "}
+          <Link to="/profile">your account</Link>
+          {SUPPORT_EMAIL ? (
             <>
-              {" "}
-              by writing to <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+              , or ask us to by writing to{" "}
+              <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
             </>
-          ) : (
-            " through our support contact"
-          )}
+          ) : null}
           .
         </li>
       </ul>
