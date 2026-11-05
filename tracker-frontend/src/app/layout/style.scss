@@ -71,3 +71,38 @@
     text-decoration: none;
   }
 }
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 32px;
+
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+
+  a {
+    color: var(--text-2);
+
+    &:hover {
+      color: var(--text);
+    }
+  }
+
+  @media (max-width: 640px) {
+    padding: 16px;
+  }
+}

@@ -1,12 +1,12 @@
 import { useCallback, useId, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Icon from "@/shared/components/Icon";
 import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
-import { timeAgo } from "@/shared/libs/format";
 import { useNotificationToasts } from "../hooks/useNotificationToasts";
 import { usePushState, useResyncPush } from "../hooks/usePush";
-import { TONE_ICONS, describeNotification } from "../notificationText";
+import { describeNotification } from "../notificationText";
 import type { Notification } from "../types";
+import NotificationItem from "./NotificationItem";
 import {
   useDismissNotification,
   useMarkNotificationsRead,
@@ -109,59 +109,27 @@ const NotificationBell = () => {
             <p className="notification-panel__empty">You're all caught up.</p>
           ) : (
             <ul className="notification-panel__list">
-              {items.map((item) => {
-                const { title, body, tone } = describeNotification(item);
-                return (
-                  <li
-                    key={item.id}
-                    className="notification-item"
-                    data-unread={!item.read_at}
-                    data-tone={tone}
-                  >
-                    <button
-                      type="button"
-                      className="notification-item__main"
-                      onClick={() => openItem(item)}
-                    >
-                      <span className="notification-item__icon">
-                        <Icon name={TONE_ICONS[tone]} size={16} />
-                      </span>
-                      <span className="notification-item__text">
-                        <span className="notification-item__title">
-                          {title}
-                        </span>
-                        {body && (
-                          <span className="notification-item__body">
-                            {body}
-                          </span>
-                        )}
-                        <time
-                          className="notification-item__time"
-                          dateTime={item.created_at}
-                        >
-                          {timeAgo(item.created_at)}
-                        </time>
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      className="notification-item__dismiss"
-                      aria-label={`Dismiss ${title}`}
-                      onClick={() => dismiss.mutate(item.id)}
-                    >
-                      <Icon name="x" size={16} />
-                    </button>
-                  </li>
-                );
-              })}
+              {items.map((item) => (
+                <NotificationItem
+                  key={item.id}
+                  item={item}
+                  onOpen={openItem}
+                  onDismiss={(entry) => dismiss.mutate(entry.id)}
+                />
+              ))}
             </ul>
           )}
 
-          {feed.data && feed.data.total > items.length && (
-            <p className="notification-panel__foot">
-              Showing the latest {items.length} of {feed.data.total}.
-            </p>
-          )}
+          <p className="notification-panel__foot">
+            {feed.data && feed.data.total > items.length && (
+              <>
+                Showing the latest {items.length} of {feed.data.total}.{" "}
+              </>
+            )}
+            <Link to="/notifications" onClick={close}>
+              View all notifications
+            </Link>
+          </p>
         </div>
       )}
     </div>

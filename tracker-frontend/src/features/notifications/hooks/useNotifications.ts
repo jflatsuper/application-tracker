@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import {
+  keepPreviousData,
   useMutation,
   useQuery,
   useQueryClient,
@@ -23,6 +24,16 @@ export const useNotificationFeed = (enabled: boolean) =>
     queryKey: notificationKeys.feed(FEED_SIZE),
     queryFn: () => notificationApi.list(FEED_SIZE),
     enabled,
+    refetchOnWindowFocus: false,
+  });
+
+// One page of the full history, newest first. Page 1 is the same request the
+// bell's feed makes, so the two share a cache entry.
+export const useNotificationPage = (page: number) =>
+  useQuery({
+    queryKey: notificationKeys.feed(FEED_SIZE, (page - 1) * FEED_SIZE),
+    queryFn: () => notificationApi.list(FEED_SIZE, (page - 1) * FEED_SIZE),
+    placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
   });
 

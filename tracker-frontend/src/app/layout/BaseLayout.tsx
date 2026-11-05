@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import DefaultHeader from "./headers/DefaultHeader";
+import Footer from "./Footer";
 import GuestBanner from "./GuestBanner";
 import AnnouncementBanner from "@/features/notifications/components/AnnouncementBanner";
 import "./style.scss";
@@ -13,6 +14,7 @@ const BaseLayout = () => {
       <main className="base-layout__main">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };

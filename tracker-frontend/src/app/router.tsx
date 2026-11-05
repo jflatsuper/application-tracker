@@ -6,6 +6,11 @@ import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { AuthComplete } from "@/features/auth/pages/Complete";
 import Login from "@/features/auth/pages/Login";
 import Register from "@/features/auth/pages/Register";
+import { SUPPORT_EMAIL } from "@/constants/site";
+import ContactPage from "@/features/legal/pages/ContactPage";
+import PrivacyPage from "@/features/legal/pages/PrivacyPage";
+import TermsPage from "@/features/legal/pages/TermsPage";
+import NotificationsPage from "@/features/notifications/pages/NotificationsPage";
 import PricingPage from "@/features/billing/pages/PricingPage";
 import HomePage from "@/features/home/pages/HomePage";
 import AccountPage from "@/features/profile/pages/AccountPage";
@@ -32,6 +37,9 @@ export const router = createBrowserRouter([
           { path: "register", element: <Register /> },
           { path: "pricing", element: <PricingPage /> },
           { path: "auth/complete", element: <AuthComplete /> },
+          { path: "privacy", element: <PrivacyPage /> },
+          { path: "terms", element: <TermsPage /> },
+          ...(SUPPORT_EMAIL ? [{ path: "contact", element: <ContactPage /> }] : []),
           {
             element: <ProtectedRoute />,
             children: [
@@ -43,6 +51,7 @@ export const router = createBrowserRouter([
                   { path: ":applicationId", element: <EditApplicationPage /> },
                 ],
               },
+              { path: "notifications", element: <NotificationsPage /> },
               // Push notifications link to /billing; the page lives under profile.
               {
                 path: "billing",
