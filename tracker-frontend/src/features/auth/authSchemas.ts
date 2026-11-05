@@ -14,5 +14,24 @@ export const registerSchema = z.object({
     .max(128, "Use 128 characters or fewer."),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email("Enter a valid email address."),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Use at least 8 characters.")
+      .max(128, "Use 128 characters or fewer."),
+    confirm: z.string(),
+  })
+  .refine((values) => values.password === values.confirm, {
+    path: ["confirm"],
+    message: "The passwords don't match.",
+  });
+
 export type LoginValues = z.infer<typeof loginSchema>;
 export type RegisterValues = z.infer<typeof registerSchema>;
+export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;

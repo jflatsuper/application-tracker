@@ -8,7 +8,12 @@ import {
 import { AuthContext, type AuthStatus } from "../AuthContext";
 import { authApi } from "../api/authApi";
 import { bootstrapSession } from "../session";
-import type { AuthResponse, UserRead, OAuthProvider } from "@/features/auth/types";
+import AuthLoading from "./AuthLoading";
+import type {
+  AuthResponse,
+  UserRead,
+  OAuthProvider,
+} from "@/features/auth/types";
 
 interface AuthState {
   status: AuthStatus;
@@ -59,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     me: authApi.me,
     setUser: (user: UserRead) => setState({ status: "authenticated", user }),
     continueAsGuest: async () => accept(await authApi.guest()),
+    acceptSession: accept,
     refresh: authApi.refresh,
     logout: async () => {
       await authApi.logout().catch(() => {});
@@ -68,6 +74,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   };
 
-  if (state.status === "loading") return <p>Loading...</p>;
+  if (state.status === "loading") return <AuthLoading />;
   return <AuthContext value={value}>{children}</AuthContext>;
 }

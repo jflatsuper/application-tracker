@@ -1,0 +1,99 @@
+import { Link } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Alert from "@/shared/components/Alert";
+import Input from "@/shared/components/form/Input";
+import { authApi } from "../api/authApi";
+import { authFlowErrorMessage } from "../errors";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordValues,
+} from "../authSchemas";
+import "../style.scss";
+
+const ForgotPassword = () => {
+  const send = useMutation({ mutationFn: authApi.forgotPassword });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordValues>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const onSubmit = ({ email }: ForgotPasswordValues) => {
+    if (send.isPending) return;
+    send.mutate(email);
+  };
+
+  return (
+    <>
+      <title>Reset your password</title>
+      <section className="auth-page" aria-labelledby="auth-title">
+        <div className="auth-card">
+          {send.isSuccess ? (
+            <>
+              <div className="auth-card__head">
+                <h1 id="auth-title">Check your email</h1>
+                <p>
+                  If an account exists for <strong>{send.variables}</strong>,
+                  we've sent a link to reset the password. It may take a few
+                  minutes to arrive, so check your spam folder too.
+                </p>
+              </div>
+              <div className="auth-card__actions">
+                <Link to="/login" className="btn btn--primary">
+                  Back to sign in
+                </Link>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={() => send.reset()}
+                >
+                  Use a different email
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="auth-card__head">
+                <h1 id="auth-title">Reset your password</h1>
+                <p>Enter your email and we'll send you a link to choose a new one.</p>
+              </div>
+
+              {send.isError && (
+                <Alert>{authFlowErrorMessage(send.error, "forgot")}</Alert>
+              )}
+
+              <form
+                className="auth-form"
+                noValidate
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <Input
+                  label="Email"
+                  type="email"
+                  autoComplete="email"
+                  error={errors.email?.message}
+                  {...register("email")}
+                />
+                <button type="submit" className="btn btn--primary">
+                  {send.isPending ? "Sending…" : "Send reset link"}
+                </button>
+              </form>
+
+              <div className="auth-footer">
+                <p>
+                  Remembered it? <Link to="/login">Sign in</Link>
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default ForgotPassword;

@@ -90,6 +90,11 @@ const Register = () => {
           <ProviderButtons verb="Sign up with" />
 
           <div className="auth-footer">
+            <p className="auth-footer__legal">
+              By continuing you agree to our{" "}
+              <Link to="/terms">terms</Link> and{" "}
+              <Link to="/privacy">privacy policy</Link>.
+            </p>
             <p>
               Already have an account?{" "}
               <Link to="/login" state={location.state}>

@@ -1,7 +1,8 @@
 export const notificationKeys = {
   all: ["notifications"] as const,
   unread: () => [...notificationKeys.all, "unread"] as const,
-  feed: (limit: number) => [...notificationKeys.all, "feed", limit] as const,
+  feed: (limit: number, offset = 0) =>
+    [...notificationKeys.all, "feed", limit, offset] as const,
 };
 
 export const announcementKeys = {

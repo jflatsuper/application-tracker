@@ -6,9 +6,12 @@ import { toast } from "react-toastify";
 import Alert from "@/shared/components/Alert";
 import Input from "@/shared/components/form/Input";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useResendVerification } from "@/features/auth/hooks/useResendVerification";
+import { needsEmailVerification } from "@/features/auth/verification";
 import { formatDate } from "@/shared/libs/format";
 import { useUpdateProfile } from "../hooks/useUpdateProfile";
 import ProfileSection from "../components/ProfileSection";
+import YourData from "../components/YourData";
 
 const profileSchema = z.object({
   full_name: z.string().max(255, "Use 255 characters or fewer."),
@@ -18,6 +21,7 @@ type ProfileValues = z.infer<typeof profileSchema>;
 const AccountPage = () => {
   const { user } = useAuth();
   const update = useUpdateProfile();
+  const resend = useResendVerification();
 
   const {
     register,
@@ -81,12 +85,36 @@ const AccountPage = () => {
         <dl className="profile-details">
           <dt>Email</dt>
           <dd>{user.email ?? "None (guest account)"}</dd>
+          {user.email && (
+            <>
+              <dt>Email status</dt>
+              <dd>
+                {needsEmailVerification(user) ? (
+                  <span className="profile-details__verify">
+                    Not verified
+                    <button
+                      type="button"
+                      className="btn"
+                      disabled={resend.isPending}
+                      onClick={() => resend.mutate()}
+                    >
+                      {resend.isPending ? "Sending…" : "Send verification email"}
+                    </button>
+                  </span>
+                ) : (
+                  `Verified${user.email_verified_at ? ` on ${formatDate(user.email_verified_at)}` : ""}`
+                )}
+              </dd>
+            </>
+          )}
           <dt>Account type</dt>
           <dd>{user.is_anonymous ? "Guest" : "Registered"}</dd>
           <dt>Member since</dt>
           <dd>{formatDate(user.created_at)}</dd>
         </dl>
       </section>
+
+      <YourData />
     </ProfileSection>
   );
 };

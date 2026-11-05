@@ -1,0 +1,71 @@
+.skeleton {
+  display: block;
+  border-radius: var(--radius-control);
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 25%,
+    var(--border) 50%,
+    var(--surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton--nav {
+  align-self: center;
+  height: 14px;
+}
+
+.skeleton--avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.skeleton--icon {
+  width: 24px;
+  height: 24px;
+}
+
+.auth-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton--title {
+  width: min(240px, 60%);
+  height: 28px;
+}
+
+.skeleton--line {
+  width: min(360px, 80%);
+  height: 14px;
+}
+
+.auth-loading__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.skeleton--card {
+  height: 96px;
+  border-radius: var(--radius-card);
+}
+
+.skeleton--block {
+  height: 240px;
+  border-radius: var(--radius-card);
+}

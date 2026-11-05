@@ -84,3 +84,24 @@
   color: var(--text-2);
   text-align: center;
 }
+
+.auth-footer__legal {
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.auth-form__forgot {
+  align-self: flex-end;
+  margin-top: -8px;
+  font-size: 13px;
+}
+
+.auth-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-card__actions .btn {
+  width: 100%;
+}
