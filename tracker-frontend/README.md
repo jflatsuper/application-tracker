@@ -11,8 +11,13 @@ It is a single-page app that talks to the Refresha API. The API is a separate se
 - **Home dashboard**: totals, a status pipeline, upcoming follow-ups and recently updated applications. Signed-out visitors see a landing page.
 - **Accounts**: email and password, Google and LinkedIn sign-in, and guest accounts that can be claimed later by registering.
 - **Profile**: name, settings (default follow-up interval, email digest, timezone), billing (plans, upgrade through hosted checkout, cancel and resume) and usage.
-- **Pricing**: a public plans page.
+- **Pricing**: a public plans page, plus pages for returning from checkout (`/billing/success`, `/billing/cancelled`).
+- **Account safety**: forgot and reset password and email verification (live), plus export or delete your data, which needs API endpoints that aren't there yet; see [docs/backlog.md](docs/backlog.md).
+- **Notifications**: a bell, a full history page, in-app toasts and browser push.
+- **Legal and help**: privacy policy, terms of service and a contact page (shown when `VITE_SUPPORT_EMAIL` is set).
 - Light and dark themes that follow the system setting, keyboard-accessible menus and forms, and route-level error and 404 pages.
+
+Ideas that aren't built yet, and the API the client expects, are logged in [docs/backlog.md](docs/backlog.md).
 
 ## Stack
 

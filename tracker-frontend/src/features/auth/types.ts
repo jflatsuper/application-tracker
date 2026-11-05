@@ -11,6 +11,8 @@ export interface UserRead {
   is_anonymous: boolean;
   is_active: boolean;
   created_at: string;
+  // When the address was confirmed from the emailed link; null until then.
+  email_verified_at: string | null;
 }
 export interface AuthResponse {
   user: UserRead;

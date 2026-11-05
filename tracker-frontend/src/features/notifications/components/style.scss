@@ -377,3 +377,19 @@
     font-size: 13px;
   }
 }
+
+// The full-page history uses the same rows as the bell's panel, in a card.
+.notification-page__list {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  list-style: none;
+  transition: opacity var(--dur-base) var(--ease);
+
+  &.is-stale {
+    opacity: 0.6;
+  }
+}
