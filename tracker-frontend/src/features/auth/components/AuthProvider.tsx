@@ -64,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     me: authApi.me,
     setUser: (user: UserRead) => setState({ status: "authenticated", user }),
     continueAsGuest: async () => accept(await authApi.guest()),
+    acceptSession: accept,
     refresh: authApi.refresh,
     logout: async () => {
       await authApi.logout().catch(() => {});

@@ -26,6 +26,9 @@ export function authErrorMessage(error: unknown, action: AuthAction): string {
   return "Couldn't create your account. Check your details and try again.";
 }
 
+export const VERIFY_LINK_INVALID =
+  "This verification link is invalid or has expired. Request a new one.";
+
 type FlowAction = "forgot" | "reset" | "verify" | "resend";
 
 const NETWORK = "Couldn't reach the server. Check your connection and try again.";
@@ -44,11 +47,9 @@ export function authFlowErrorMessage(error: unknown, action: FlowAction): string
     case "forgot":
       return "Enter a valid email address and try again.";
     case "reset":
-      return error.status === 422
-        ? "Choose a password of at least 8 characters."
-        : "This reset link is invalid or has expired. Request a new one.";
+      return "This reset link is invalid or has expired. Request a new one.";
     case "verify":
-      return "This verification link is invalid or has expired. Request a new one.";
+      return VERIFY_LINK_INVALID;
     case "resend":
       return "Couldn't send the email. Try again in a moment.";
   }

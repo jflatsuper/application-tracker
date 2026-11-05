@@ -17,9 +17,10 @@ export const authApi = {
   updateMe: (data: { full_name: string | null }) =>
     apiClient.patch<UserRead>(`/v1/users/me`, data),
   forgotPassword: (email: string) =>
-    apiClient.post<void>(`${authApi.baseUrl}/password/forgot`, { email }),
+    apiClient.post<void>(`${authApi.baseUrl}/forgot-password`, { email }),
+  // Signs the user in, like login does.
   resetPassword: (c: { token: string; password: string }) =>
-    apiClient.post<void>(`${authApi.baseUrl}/password/reset`, c),
+    apiClient.post<AuthResponse>(`${authApi.baseUrl}/reset-password`, c),
   verifyEmail: (token: string) =>
     apiClient.post<void>(`${authApi.baseUrl}/email/verify`, { token }),
   resendVerification: () =>

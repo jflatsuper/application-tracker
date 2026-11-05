@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { authErrorMessage } from "@/features/auth/errors";
+import { ApiError } from "@/shared/libs/apiClient";
 import Input from "@/shared/components/form/Input";
 import Alert from "@/shared/components/Alert";
 import ProviderButtons from "../components/ProviderButtons";
@@ -56,9 +57,11 @@ function Login() {
     try {
       await continueAsGuest();
       navigate("/applications");
-    } catch {
+    } catch (error) {
       setFormError(
-        "Couldn't start a guest session. Check your connection and try again.",
+        error instanceof ApiError && error.status === 429
+          ? authErrorMessage(error, "login")
+          : "Couldn't start a guest session. Check your connection and try again.",
       );
     }
   };

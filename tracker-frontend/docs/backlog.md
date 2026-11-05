@@ -11,7 +11,6 @@ Not started. Roughly in the order they'd be worth doing.
 | Idea | Notes |
 | --- | --- |
 | Notification preferences per type | Today there is one on/off for browser push. A list (follow-up reminders, digests, billing notices) needs a settings field per type on the API. |
-| Email-verified banner | Prompt unverified users to confirm their email. Needs `email_verified` on `UserRead`. |
 | Import and export applications as CSV | Export is already covered by "Export your data" (JSON). CSV is for spreadsheets. Import needs a bulk-create endpoint. |
 | Calendar / follow-up view | A month view of follow-up dates. `follow_up_at` is already on applications, so this can be built from the existing list endpoint. |
 | Changelog / "what's new" page | A static page, or driven by announcements. |
@@ -21,29 +20,43 @@ Not started. Roughly in the order they'd be worth doing.
 
 ## Backend the web client already calls (ships with pages built)
 
-These pages are built and wired up, but the API has no matching endpoints yet.
+These pages are built and wired up, but the API has no matching endpoints yet
+(forgot and reset password and email verification are the exception, see above).
 Until it does, each screen shows "This isn't available right now" (it treats a
 404, 405 or 501 as "not available" rather than a user error). The shapes below
 are what the client sends and expects; change them here and in
 `features/auth/api/authApi.ts` together.
 
-### Forgot and reset password
+### Forgot and reset password (live)
 
-| Call | Body | Success | Errors |
-| --- | --- | --- | --- |
-| `POST /v1/auth/password/forgot` | `{ "email": string }` | `202` or `204`, always, whether or not the email exists | `429` with `Retry-After` |
-| `POST /v1/auth/password/reset` | `{ "token": string, "password": string }` (8 to 128 chars) | `204` | `400` or `410` invalid or expired token, `422` weak password |
+Built against the real API and tested with it.
 
-The email must link to **`/reset-password?token=<token>`** on the web app.
+| Call | Body | Response |
+| --- | --- | --- |
+| `POST /v1/auth/forgot-password` | `{ "email": string }` | `202`, always, whether or not the address has an account. `422` for an address the server rejects (such as a `.test` domain). |
+| `POST /v1/auth/reset-password` | `{ "token": string (20 to 128 chars), "password": string (8 to 128 chars) }` | `200` with the same session as login (`user` and `tokens`), so the user is signed in straight away. `400` for an invalid or expired token. |
 
-### Email verification
+The reset email links to `<web app>/reset-password#token=<token>`. The token is in
+the fragment, so it never reaches a server log; a `?token=` query is still
+accepted. Invalid tokens take a few seconds to answer because the server hashes
+the new password first.
 
-| Call | Body | Success | Errors |
-| --- | --- | --- | --- |
-| `POST /v1/auth/email/verify` | `{ "token": string }` | `204` | `400` or `410` invalid or expired token |
-| `POST /v1/auth/email/resend` | `{}` (signed in) | `204` | `429` with `Retry-After` |
+### Email verification (live)
 
-The email must link to **`/verify-email?token=<token>`**. Tokens are single use.
+| Call | Body | Response |
+| --- | --- | --- |
+| `POST /v1/auth/email/verify` | `{ "token": string (20 to 128 chars) }` | `204`. `422` for a token of the wrong length. |
+| `POST /v1/auth/email/resend` | none (signed in as a registered user) | `204`, whether or not anything was sent. `401` for a guest. |
+
+The email links to `<web app>/verify-email#token=<token>`, the same shape as the
+reset link (`?token=` also works). Tokens are single use. The client doesn't send
+a token of the wrong length, and only offers "send a new link" to registered users.
+
+`UserRead` carries `email_verified_at` (a date, or `null` until confirmed). The app
+uses it for a banner asking registered users to confirm their address (with a
+"Resend email" button), for an "Email status" row on the Account page, and
+refreshes it after a successful verification so the banner goes away. Guests and
+accounts without an email are never asked.
 
 ### Export and delete account
 

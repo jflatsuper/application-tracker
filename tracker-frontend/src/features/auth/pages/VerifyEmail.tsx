@@ -1,16 +1,19 @@
-import { Link, useSearchParams } from "react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useLocation } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 import Alert from "@/shared/components/Alert";
-import { toast } from "react-toastify";
 import { authApi } from "../api/authApi";
-import { authFlowErrorMessage } from "../errors";
+import { useResendVerification } from "../hooks/useResendVerification";
+import { VERIFY_LINK_INVALID, authFlowErrorMessage } from "../errors";
+import { looksLikeToken, readLinkToken } from "../linkToken";
 import { useAuth } from "../hooks/useAuth";
 import "../style.scss";
 
 const VerifyEmail = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-  const { status, user } = useAuth();
+  const linkToken = readLinkToken(useLocation());
+  // A token of the wrong length can't be valid, so don't send it.
+  const token = looksLikeToken(linkToken) ? linkToken : null;
+  const malformed = !!linkToken && !token;
+  const { status, user, me, setUser } = useAuth();
   const canResend = status === "authenticated" && !user?.is_anonymous;
 
   // A token works once, so it is never retried or refetched.
@@ -18,6 +21,14 @@ const VerifyEmail = () => {
     queryKey: ["verify-email", token],
     queryFn: async () => {
       await authApi.verifyEmail(token as string);
+      // Pick up the new verified date so the banner goes away.
+      if (status === "authenticated") {
+        try {
+          setUser(await me());
+        } catch {
+          // The address is verified either way; the next load shows it.
+        }
+      }
       return true;
     },
     enabled: !!token,
@@ -26,10 +37,7 @@ const VerifyEmail = () => {
     refetchOnWindowFocus: false,
   });
 
-  const resend = useMutation({
-    mutationFn: authApi.resendVerification,
-    onSuccess: () => toast.success("Verification email sent"),
-  });
+  const resend = useResendVerification();
 
   const resendButton = canResend && (
     <button
@@ -43,7 +51,7 @@ const VerifyEmail = () => {
   );
 
   const body = () => {
-    if (!token) {
+    if (!token && !malformed) {
       return (
         <>
           <div className="auth-card__head">
@@ -53,9 +61,6 @@ const VerifyEmail = () => {
               device to finish.
             </p>
           </div>
-          {resend.isError && (
-            <Alert>{authFlowErrorMessage(resend.error, "resend")}</Alert>
-          )}
           <div className="auth-card__actions">
             {resendButton}
             {!canResend && (
@@ -68,7 +73,7 @@ const VerifyEmail = () => {
       );
     }
 
-    if (verify.isPending) {
+    if (!malformed && verify.isPending) {
       return (
         <div className="auth-card__head" role="status">
           <h1 id="auth-title">Verifying your email…</h1>
@@ -77,16 +82,17 @@ const VerifyEmail = () => {
       );
     }
 
-    if (verify.isError) {
+    if (malformed || verify.isError) {
       return (
         <>
           <div className="auth-card__head">
             <h1 id="auth-title">Couldn't verify your email</h1>
           </div>
-          <Alert>{authFlowErrorMessage(verify.error, "verify")}</Alert>
-          {resend.isError && (
-            <Alert>{authFlowErrorMessage(resend.error, "resend")}</Alert>
-          )}
+          <Alert>
+            {malformed
+              ? VERIFY_LINK_INVALID
+              : authFlowErrorMessage(verify.error, "verify")}
+          </Alert>
           <div className="auth-card__actions">
             {resendButton}
             {!canResend && (

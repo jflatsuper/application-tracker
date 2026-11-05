@@ -1,11 +1,14 @@
-import { Link, useSearchParams } from "react-router";
+import { Link, Navigate, useLocation } from "react-router";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Alert from "@/shared/components/Alert";
 import Input from "@/shared/components/form/Input";
 import { authApi } from "../api/authApi";
 import { authFlowErrorMessage } from "../errors";
+import { useAuth } from "../hooks/useAuth";
+import { looksLikeToken, readLinkToken } from "../linkToken";
 import {
   resetPasswordSchema,
   type ResetPasswordValues,
@@ -13,9 +16,16 @@ import {
 import "../style.scss";
 
 const ResetPassword = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-  const reset = useMutation({ mutationFn: authApi.resetPassword });
+  const token = readLinkToken(useLocation());
+  const { acceptSession } = useAuth();
+  // The server signs you in once the password is set.
+  const reset = useMutation({
+    mutationFn: authApi.resetPassword,
+    onSuccess: (session) => {
+      acceptSession(session);
+      toast.success("Password updated. You're signed in.");
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -25,12 +35,14 @@ const ResetPassword = () => {
   });
 
   const onSubmit = ({ password }: ResetPasswordValues) => {
-    if (!token || reset.isPending) return;
+    if (!looksLikeToken(token) || reset.isPending) return;
     reset.mutate({ token, password });
   };
 
+  if (reset.isSuccess) return <Navigate to="/applications" replace />;
+
   const body = () => {
-    if (!token) {
+    if (!looksLikeToken(token)) {
       return (
         <>
           <div className="auth-card__head">
@@ -43,22 +55,6 @@ const ResetPassword = () => {
           <div className="auth-card__actions">
             <Link to="/forgot-password" className="btn btn--primary">
               Request a new link
-            </Link>
-          </div>
-        </>
-      );
-    }
-
-    if (reset.isSuccess) {
-      return (
-        <>
-          <div className="auth-card__head">
-            <h1 id="auth-title">Password updated</h1>
-            <p>You can now sign in with your new password.</p>
-          </div>
-          <div className="auth-card__actions">
-            <Link to="/login" className="btn btn--primary">
-              Sign in
             </Link>
           </div>
         </>

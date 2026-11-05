@@ -1,5 +1,9 @@
 // AuthContext.ts
-import type { OAuthProvider, UserRead } from "@/features/auth/types";
+import type {
+  AuthResponse,
+  OAuthProvider,
+  UserRead,
+} from "@/features/auth/types";
 import { createContext } from "react";
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
@@ -14,6 +18,8 @@ export interface AuthContextValue {
     full_name?: string;
   }) => Promise<void>;
   continueAsGuest: () => Promise<void>;
+  // Takes a session the server already issued (such as after a password reset).
+  acceptSession: (response: AuthResponse) => void;
   logout: () => void;
   me: () => Promise<UserRead>;
   setUser: (user: UserRead) => void;

@@ -254,3 +254,10 @@
   gap: 16px;
   max-width: 360px;
 }
+
+.profile-details__verify {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}

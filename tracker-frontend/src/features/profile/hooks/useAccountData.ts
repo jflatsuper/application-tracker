@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { authApi } from "@/features/auth/api/authApi";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -18,13 +17,11 @@ export function useExportData() {
 
 export function useDeleteAccount() {
   const { logout } = useAuth();
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: authApi.deleteAccount,
-    onSuccess: () => {
-      // Leave the protected pages first so the sign-out doesn't bounce to login.
-      navigate("/", { replace: true });
-      void logout();
+    onSuccess: async () => {
+      // Same as signing out: protected pages send you to the login page.
+      await logout();
       toast.success("Your account was deleted");
     },
   });
