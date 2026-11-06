@@ -40,12 +40,21 @@
     gap: 20px;
   }
 
-  a {
+  a,
+  nav button {
     color: var(--text-2);
 
     &:hover {
       color: var(--text);
     }
+  }
+
+  nav button {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
   }
 
   @media (max-width: 640px) {

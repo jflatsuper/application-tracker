@@ -9,3 +9,9 @@ export const SUPPORT_EMAIL: string | undefined =
 // left out when it isn't set.
 export const SITE_URL: string | undefined =
   import.meta.env.VITE_SITE_URL?.trim().replace(/\/+$/, "") || undefined;
+
+// The Google tag ID (for example G-XXXXXXXXXX) from Google Analytics. Set
+// VITE_GOOGLE_TAG_ID when building. With none set, nothing from Google is
+// loaded and no page views are sent.
+export const GOOGLE_TAG_ID: string | undefined =
+  import.meta.env.VITE_GOOGLE_TAG_ID?.trim() || undefined;
