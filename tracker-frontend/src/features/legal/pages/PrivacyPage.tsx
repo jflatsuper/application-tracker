@@ -1,12 +1,14 @@
 import { Link } from "react-router";
-import { SUPPORT_EMAIL } from "@/constants/site";
+import Button from "@/shared/components/button";
+import { openCookieSettings } from "@/shared/libs/consent";
+import { GOOGLE_TAG_ID, SUPPORT_EMAIL } from "@/constants/site";
 import LegalDocument from "../components/LegalDocument";
 
 const PrivacyPage = () => (
   <LegalDocument
     title="Privacy policy"
     path="/privacy"
-    updated="5 November 2026"
+    updated="6 November 2026"
     intro="Refresha keeps track of the jobs you apply for. This page explains what we store about you, why, and the choices you have."
   >
     <section>
@@ -61,9 +63,18 @@ const PrivacyPage = () => (
       <p>
         We use a sign-in cookie to keep you signed in, and a few small items in
         your browser's storage to remember that you have a session, whether the
-        account sidebar is collapsed, and your own AI key if you saved one. We
-        don't use advertising or analytics cookies.
+        account sidebar is collapsed, and your own AI key if you saved one.{" "}
+        {GOOGLE_TAG_ID
+          ? "We also use Google Analytics to see which pages are visited, which sets its own cookies in your browser. We don't use advertising cookies, and we don't turn on Google's ad personalisation. It only runs if you accept, and you can change your mind at any time."
+          : "We don't use advertising or analytics cookies."}
       </p>
+      {GOOGLE_TAG_ID && (
+        <p>
+          <Button size="sm" onClick={openCookieSettings}>
+            Cookie settings
+          </Button>
+        </p>
+      )}
     </section>
 
     <section>
@@ -72,6 +83,8 @@ const PrivacyPage = () => (
         We don't sell your data. We use service providers to run Refresha:
         hosting, payments, sending notifications and reading job postings with
         AI. They only receive what they need to do that job.
+        {GOOGLE_TAG_ID &&
+          " Google Analytics receives the page you visit (its address without any query or fragment), your browser and device type, and an approximate location. It never receives your name, email or application details."}
       </p>
     </section>
 
