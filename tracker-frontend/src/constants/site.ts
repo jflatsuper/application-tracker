@@ -15,3 +15,13 @@ export const SITE_URL: string | undefined =
 // loaded and no page views are sent.
 export const GOOGLE_TAG_ID: string | undefined =
   import.meta.env.VITE_GOOGLE_TAG_ID?.trim() || undefined;
+
+// The browser extension's ID(s), comma-separated (for example the Chrome Web
+// Store ID, plus a development one). Set VITE_EXTENSION_ID when building. The
+// "Connect the extension" page only ever hands a session to an ID on this list,
+// so a link can't send someone's session to an extension of an attacker's
+// choosing. With none set, the page says the extension isn't available.
+export const EXTENSION_IDS: string[] = (import.meta.env.VITE_EXTENSION_ID ?? "")
+  .split(",")
+  .map((id: string) => id.trim())
+  .filter(Boolean);
