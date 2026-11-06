@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { formatDate } from "@/shared/libs/format";
 import StatusChip from "@/features/applications/components/StatusChip";
@@ -17,6 +17,9 @@ import {
 } from "../homeStats";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelTitle, PanelText } from "@/shared/components/panel/Panel";
 const SHOWN = 5;
 
 const Dashboard = () => {
@@ -64,9 +67,9 @@ const Dashboard = () => {
             Couldn't load your applications. Check your connection and try
             again.
           </Alert>
-          <button type="button" className="btn" onClick={() => refetch()}>
+          <Button type="button" onClick={() => refetch()}>
             Try again
-          </button>
+          </Button>
         </div>
       );
     }
@@ -87,9 +90,9 @@ const Dashboard = () => {
             Log a role when you save it or apply. You can move it through
             screening, interviews and offers, and set when to follow up.
           </p>
-          <Link to="/applications/create" className="btn btn--primary">
+          <Button to="/applications/create" variant="primary">
             Add application
-          </Link>
+          </Button>
         </div>
       );
     }
@@ -107,10 +110,8 @@ const Dashboard = () => {
           ))}
         </ul>
 
-        <section className="panel" aria-labelledby="pipeline-title">
-          <h2 id="pipeline-title" className="panel__title">
-            Pipeline
-          </h2>
+        <Panel aria-labelledby="pipeline-title">
+          <PanelTitle id="pipeline-title">Pipeline</PanelTitle>
           <div className="home-pipeline__bar" aria-hidden="true">
             {STATUS_ORDER.filter((s) => counts[s] > 0).map((s) => (
               <span
@@ -134,17 +135,15 @@ const Dashboard = () => {
               </li>
             ))}
           </ul>
-        </section>
+        </Panel>
 
         <div className="home-columns">
-          <section className="panel" aria-labelledby="followups-title">
-            <h2 id="followups-title" className="panel__title">
-              Follow-ups
-            </h2>
+          <Panel aria-labelledby="followups-title">
+            <PanelTitle id="followups-title">Follow-ups</PanelTitle>
             {followUps.length === 0 ? (
-              <p className="panel__text">
+              <PanelText>
                 No follow-ups scheduled. Set one from an application's page.
-              </p>
+              </PanelText>
             ) : (
               <ul className="home-rows">
                 {followUps.slice(0, SHOWN).map(({ application, days }) => (
@@ -178,12 +177,10 @@ const Dashboard = () => {
                 ))}
               </ul>
             )}
-          </section>
+          </Panel>
 
-          <section className="panel" aria-labelledby="recent-title">
-            <h2 id="recent-title" className="panel__title">
-              Recently updated
-            </h2>
+          <Panel aria-labelledby="recent-title">
+            <PanelTitle id="recent-title">Recently updated</PanelTitle>
             <ul className="home-rows">
               {recent.map((application) => (
                 <li key={application.id} className="home-row">
@@ -203,7 +200,7 @@ const Dashboard = () => {
                 </li>
               ))}
             </ul>
-          </section>
+          </Panel>
         </div>
       </>
     );
@@ -220,14 +217,10 @@ const Dashboard = () => {
           {data && <p className="home__sub">{summary}</p>}
         </div>
         <div className="home__actions">
-          <Link to="/applications/create" className="btn btn--primary">
+          <Button to="/applications/create" variant="primary">
             Add application
-          </Link>
-          {total > 0 && (
-            <Link to="/applications" className="btn">
-              View all
-            </Link>
-          )}
+          </Button>
+          {total > 0 && <Button to="/applications">View all</Button>}
         </div>
       </div>
       {renderBody()}

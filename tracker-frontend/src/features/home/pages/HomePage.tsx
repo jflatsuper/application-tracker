@@ -1,3 +1,4 @@
+import PageMeta from "@/shared/components/page-meta";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import Dashboard from "../components/Dashboard";
 import Landing from "../components/Landing";
@@ -7,8 +8,17 @@ const HomePage = () => {
 
   return (
     <>
-      <title>Home</title>
-      {status === "authenticated" ? <Dashboard /> : <Landing />}
+      {status === "authenticated" ? (
+        <>
+          <title>Home</title>
+          <Dashboard />
+        </>
+      ) : (
+        <>
+          <PageMeta path="/" />
+          <Landing />
+        </>
+      )}
     </>
   );
 };

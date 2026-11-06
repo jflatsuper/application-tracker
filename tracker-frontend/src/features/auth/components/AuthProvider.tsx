@@ -8,7 +8,6 @@ import {
 import { AuthContext, type AuthStatus } from "../AuthContext";
 import { authApi } from "../api/authApi";
 import { bootstrapSession } from "../session";
-import AuthLoading from "./AuthLoading";
 import type {
   AuthResponse,
   UserRead,
@@ -21,7 +20,14 @@ interface AuthState {
 }
 const LOGGED_OUT: AuthState = { status: "unauthenticated", user: null };
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+// `fallback` is what to show while the saved session is being checked.
+export function AuthProvider({
+  children,
+  fallback,
+}: {
+  children: ReactNode;
+  fallback: ReactNode;
+}) {
   const [state, setState] = useState<AuthState>({
     status: "loading",
     user: null,
@@ -74,6 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   };
 
-  if (state.status === "loading") return <AuthLoading />;
+  if (state.status === "loading") return fallback;
   return <AuthContext value={value}>{children}</AuthContext>;
 }

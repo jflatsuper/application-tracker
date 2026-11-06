@@ -1,9 +1,9 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import Alert from "@/shared/components/Alert";
-import Input from "@/shared/components/form/Input";
-import Select from "@/shared/components/form/Select";
+import Alert from "@/shared/components/alert";
+import Input from "@/shared/components/form/input";
+import Select from "@/shared/components/form/select";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useUpdateSettings } from "../hooks/useSettings";
 import {
@@ -18,6 +18,9 @@ import {
 } from "../settingsForm";
 import type { UserSettings } from "../types";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelTitle, PanelText } from "@/shared/components/panel/Panel";
 const SettingsForm = ({ settings }: { settings: UserSettings }) => {
   const { user } = useAuth();
   const update = useUpdateSettings();
@@ -53,8 +56,8 @@ const SettingsForm = ({ settings }: { settings: UserSettings }) => {
         <Alert>Couldn't save. Check your connection and try again.</Alert>
       )}
 
-      <section className="panel">
-        <h2 className="panel__title">Follow-ups</h2>
+      <Panel>
+        <PanelTitle>Follow-ups</PanelTitle>
         <Input
           label="Default follow-up interval (days)"
           type="number"
@@ -65,15 +68,15 @@ const SettingsForm = ({ settings }: { settings: UserSettings }) => {
           error={errors.follow_up_interval_days?.message}
           {...register("follow_up_interval_days")}
         />
-      </section>
+      </Panel>
 
-      <section className="panel">
-        <h2 className="panel__title">Email digest</h2>
+      <Panel>
+        <PanelTitle>Email digest</PanelTitle>
         {user?.is_anonymous && (
-          <p className="panel__text">
-            Digests need an account with an email address. Create an account
-            to receive them.
-          </p>
+          <PanelText>
+            Digests need an account with an email address. Create an account to
+            receive them.
+          </PanelText>
         )}
         <Select
           label="How often"
@@ -95,9 +98,10 @@ const SettingsForm = ({ settings }: { settings: UserSettings }) => {
           error={errors.timezone?.message}
           {...register("timezone")}
         />
-        <button
+        <Button
           type="button"
-          className="btn btn--ghost settings-form__device"
+          variant="ghost"
+          className="settings-form__device"
           onClick={() =>
             setValue("timezone", device, {
               shouldDirty: true,
@@ -106,17 +110,13 @@ const SettingsForm = ({ settings }: { settings: UserSettings }) => {
           }
         >
           Use my device's timezone ({device.replace(/_/g, " ")})
-        </button>
-      </section>
+        </Button>
+      </Panel>
 
       <div>
-        <button
-          type="submit"
-          className="btn btn--primary"
-          aria-busy={update.isPending}
-        >
+        <Button type="submit" variant="primary" aria-busy={update.isPending}>
           {update.isPending ? "Saving…" : "Save settings"}
-        </button>
+        </Button>
       </div>
     </form>
   );

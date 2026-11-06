@@ -14,6 +14,7 @@ It is a single-page app that talks to the Refresha API. The API is a separate se
 - **Pricing**: a public plans page, plus pages for returning from checkout (`/billing/success`, `/billing/cancelled`).
 - **Account safety**: forgot and reset password and email verification (live), plus export or delete your data, which needs API endpoints that aren't there yet; see [docs/backlog.md](docs/backlog.md).
 - **Notifications**: a bell, a full history page, in-app toasts and browser push.
+- **Search and sharing**: each public page (home, pricing, privacy, terms, contact) and the sign-in pages get their own HTML file at build time with their own title, description and social tags, so link previews and crawlers that don't run JavaScript see them. Also writes `robots.txt` and a sitemap and ships a social-preview image. Per-page tags live in `src/constants/pageSeo.ts`. Set `VITE_SITE_URL` to turn on canonical links and the sitemap.
 - **Legal and help**: privacy policy, terms of service and a contact page (shown when `VITE_SUPPORT_EMAIL` is set).
 - Light and dark themes that follow the system setting, keyboard-accessible menus and forms, and route-level error and 404 pages.
 
@@ -58,27 +59,48 @@ The app and the API must be opened on the **same host name** in development: use
 ```
 src/
   main.tsx            entry point
-  app/                app shell: App, router, layout (header, guest banner), error pages
+  app/                app shell: App, router, layout (header, footer, banners, loading skeleton) and error pages
   features/           one folder per area of the product
     applications/     list, create, edit, history, status chips, form schemas
-    auth/             session, sign-in and registration pages, route protection
-    billing/          plans, entitlements, checkout, cancel and resume
+    auth/             session, sign-in, registration, password reset and email verification, route protection
+    billing/          plans, entitlements, checkout, checkout return pages, cancel and resume
     home/             dashboard and landing page
+    legal/            privacy policy, terms of service and the contact page
+    notifications/    bell and history page, announcements, toasts, browser push
     parser/           job posting parser, including the bring-your-own-key client
-    profile/          account, settings, billing and usage pages; developer tools
-  shared/             components (forms, table, pagination, icons) and libs (API client, formatting)
+    profile/          account, settings, billing and usage pages; export and delete account; developer tools
+  shared/             components (button, panel, banner, alert, form fields, table, pagination, icons, loading/empty/error states, page meta tags) and libs (API client, formatting)
   styles/             design tokens (light and dark) and base styles
   assets/icons/       SVG icons, rendered through the Icon component
-  constants/  types/  dev/
+  constants/          nav links, site address and per-page SEO tags (plain data, also read by the build)
+  types/  dev/
+vite/                 build plugin that writes robots.txt, the sitemap and each public page's HTML head
+public/               static files: favicons, social image, manifest, service worker
+docs/                 backlog and the API the client expects
 ```
 
 Each feature is split into `pages/`, `components/`, `hooks/` and `api/` where it needs them, with its schemas and helpers at the feature root.
 
+**Shared components.** `shared/components/` holds only folders, one per component, named in lowercase (kebab-case for several words). Inside, the component file keeps its PascalCase name, next to its stylesheet and an `index.ts` that re-exports the one default export:
+
+```
+shared/components/
+  button/
+    Button.tsx
+    button.scss
+    index.ts          export { default } from "./Button";
+```
+
+Import the default through the folder: `import Button from "@/shared/components/button"`. Anything else (a named export such as `PanelTitle`, or another file in the folder) is imported by its full path: `import { PanelTitle } from "@/shared/components/panel/Panel"`. The `index.ts` never re-exports more than that default. Feature and app components are plain files in their own `components/` folders, with no barrels.
+
+Use the shared components instead of repeating classes: `Button` (variants, sizes, links), `Panel` with `PanelTitle`, `PanelText` and `PanelActions`, `Banner`, `Alert`, `Field` and the form controls, `EmptyState`, `ErrorState` and `LoadingState`, and `ErrorPage`.
+
 **Conventions**
 
-- Dependencies point one way: `shared` imports from nothing else in the app, `features` import from `shared` and occasionally from each other, and `app` imports from both.
+- Dependencies point one way: `shared` imports from nothing else in the app (apart from static data in `assets`, `types` and `constants`), `features` import from `shared` and occasionally from each other, and `app` imports from both. A feature never imports from `app`; things the app shell owns are passed in (for example `AuthProvider` takes a `fallback`).
 - Imports that cross a folder boundary use the `@/` alias; imports inside a feature are relative.
 - Colours, spacing, radii and motion come from the CSS variables in `styles/tokens.scss`. Components do not hard-code values.
+- Buttons and links that look like buttons are always the `Button` component, never a hand-written `btn` class.
 - Add an icon by dropping an SVG into `assets/icons/` and registering it in `assets/icons/index.ts`.
 
 ## How it talks to the API

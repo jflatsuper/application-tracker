@@ -129,10 +129,6 @@
   align-self: flex-start;
 }
 
-.panel--dev {
-  border-style: dashed;
-}
-
 .profile-details {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);

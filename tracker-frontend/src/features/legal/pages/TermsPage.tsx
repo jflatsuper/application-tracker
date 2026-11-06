@@ -5,6 +5,7 @@ import LegalDocument from "../components/LegalDocument";
 const TermsPage = () => (
   <LegalDocument
     title="Terms of service"
+    path="/terms"
     updated="5 November 2026"
     intro="These terms apply when you use Refresha. By creating an account or continuing as a guest, you agree to them."
   >
@@ -12,10 +13,10 @@ const TermsPage = () => (
       <h2>Using Refresha</h2>
       <p>
         Refresha helps you keep track of job applications. You can use it as a
-        guest or with an account. You're responsible for what you put in it
-        and for keeping your sign-in details safe. Please don't use Refresha to
-        break the law, to attack or overload the service, or to access
-        someone else's account.
+        guest or with an account. You're responsible for what you put in it and
+        for keeping your sign-in details safe. Please don't use Refresha to
+        break the law, to attack or overload the service, or to access someone
+        else's account.
       </p>
     </section>
 
@@ -32,8 +33,8 @@ const TermsPage = () => (
     <section>
       <h2>Guest accounts</h2>
       <p>
-        A guest account has no email, so we can't help you recover it. Create
-        an account to keep your applications safe and to use paid features.
+        A guest account has no email, so we can't help you recover it. Create an
+        account to keep your applications safe and to use paid features.
       </p>
     </section>
 
@@ -43,8 +44,8 @@ const TermsPage = () => (
         Some features need a paid plan. Prices are shown at checkout and
         payments are taken by our payment provider. Plans renew each billing
         period until you cancel. You can cancel from{" "}
-        <Link to="/profile/billing">Billing</Link>, and you keep your plan
-        until the end of the period you've paid for.
+        <Link to="/profile/billing">Billing</Link>, and you keep your plan until
+        the end of the period you've paid for.
       </p>
     </section>
 
@@ -59,8 +60,8 @@ const TermsPage = () => (
     <section>
       <h2>Availability</h2>
       <p>
-        We work to keep Refresha running, but we can't promise it will always
-        be available or error-free. We may change or remove features, and we'll
+        We work to keep Refresha running, but we can't promise it will always be
+        available or error-free. We may change or remove features, and we'll
         give notice where we reasonably can.
       </p>
     </section>

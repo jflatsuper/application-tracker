@@ -11,12 +11,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { authErrorMessage } from "@/features/auth/errors";
 import { ApiError } from "@/shared/libs/apiClient";
-import Input from "@/shared/components/form/Input";
-import Alert from "@/shared/components/Alert";
+import Input from "@/shared/components/form/input";
+import Alert from "@/shared/components/alert";
+import PageMeta from "@/shared/components/page-meta";
 import ProviderButtons from "../components/ProviderButtons";
 import { loginSchema, type LoginValues } from "../authSchemas";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const PROVIDER_ERROR =
   "We couldn't sign you in with that provider. Try again, or use your email.";
 
@@ -68,7 +70,7 @@ function Login() {
 
   return (
     <>
-      <title>Sign in</title>
+      <PageMeta path="/login" />
       <section className="auth-page" aria-labelledby="auth-title">
         <div className="auth-card">
           <div className="auth-card__head">
@@ -100,9 +102,9 @@ function Login() {
             <Link to="/forgot-password" className="auth-form__forgot">
               Forgot password?
             </Link>
-            <button type="submit" className="btn btn--primary">
+            <Button type="submit" variant="primary">
               {isSubmitting ? "Signing in…" : "Sign in"}
-            </button>
+            </Button>
           </form>
 
           <div className="auth-divider">or</div>
@@ -116,13 +118,9 @@ function Login() {
               </Link>
             </p>
             {status === "unauthenticated" && (
-              <button
-                type="button"
-                className="btn btn--ghost"
-                onClick={onGuest}
-              >
+              <Button type="button" variant="ghost" onClick={onGuest}>
                 Continue as guest
-              </button>
+              </Button>
             )}
           </div>
         </div>

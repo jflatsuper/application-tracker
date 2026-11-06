@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import { authApi } from "../api/authApi";
 import { useResendVerification } from "../hooks/useResendVerification";
 import { VERIFY_LINK_INVALID, authFlowErrorMessage } from "../errors";
@@ -8,6 +8,7 @@ import { looksLikeToken, readLinkToken } from "../linkToken";
 import { useAuth } from "../hooks/useAuth";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const VerifyEmail = () => {
   const linkToken = readLinkToken(useLocation());
   // A token of the wrong length can't be valid, so don't send it.
@@ -40,14 +41,13 @@ const VerifyEmail = () => {
   const resend = useResendVerification();
 
   const resendButton = canResend && (
-    <button
+    <Button
       type="button"
-      className="btn"
       disabled={resend.isPending}
       onClick={() => resend.mutate()}
     >
       {resend.isPending ? "Sending…" : "Send a new link"}
-    </button>
+    </Button>
   );
 
   const body = () => {
@@ -57,16 +57,16 @@ const VerifyEmail = () => {
           <div className="auth-card__head">
             <h1 id="auth-title">Check your email</h1>
             <p>
-              We sent you a link to confirm your address. Open it on this
-              device to finish.
+              We sent you a link to confirm your address. Open it on this device
+              to finish.
             </p>
           </div>
           <div className="auth-card__actions">
             {resendButton}
             {!canResend && (
-              <Link to="/login" className="btn btn--primary">
+              <Button to="/login" variant="primary">
                 Sign in
-              </Link>
+              </Button>
             )}
           </div>
         </>
@@ -96,9 +96,9 @@ const VerifyEmail = () => {
           <div className="auth-card__actions">
             {resendButton}
             {!canResend && (
-              <Link to="/login" className="btn btn--primary">
+              <Button to="/login" variant="primary">
                 Sign in to request a new link
-              </Link>
+              </Button>
             )}
           </div>
         </>
@@ -112,12 +112,12 @@ const VerifyEmail = () => {
           <p>Thanks, your email address is confirmed.</p>
         </div>
         <div className="auth-card__actions">
-          <Link
+          <Button
             to={status === "authenticated" ? "/applications" : "/login"}
-            className="btn btn--primary"
+            variant="primary"
           >
             {status === "authenticated" ? "Go to applications" : "Sign in"}
-          </Link>
+          </Button>
         </div>
       </>
     );

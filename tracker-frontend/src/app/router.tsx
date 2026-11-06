@@ -47,7 +47,9 @@ export const router = createBrowserRouter([
           { path: "auth/complete", element: <AuthComplete /> },
           { path: "privacy", element: <PrivacyPage /> },
           { path: "terms", element: <TermsPage /> },
-          ...(SUPPORT_EMAIL ? [{ path: "contact", element: <ContactPage /> }] : []),
+          ...(SUPPORT_EMAIL
+            ? [{ path: "contact", element: <ContactPage /> }]
+            : []),
           {
             element: <ProtectedRoute />,
             children: [

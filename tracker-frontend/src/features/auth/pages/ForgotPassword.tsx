@@ -2,8 +2,9 @@ import { Link } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Alert from "@/shared/components/Alert";
-import Input from "@/shared/components/form/Input";
+import Alert from "@/shared/components/alert";
+import PageMeta from "@/shared/components/page-meta";
+import Input from "@/shared/components/form/input";
 import { authApi } from "../api/authApi";
 import { authFlowErrorMessage } from "../errors";
 import {
@@ -12,6 +13,7 @@ import {
 } from "../authSchemas";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const ForgotPassword = () => {
   const send = useMutation({ mutationFn: authApi.forgotPassword });
   const {
@@ -29,7 +31,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <title>Reset your password</title>
+      <PageMeta path="/forgot-password" />
       <section className="auth-page" aria-labelledby="auth-title">
         <div className="auth-card">
           {send.isSuccess ? (
@@ -43,23 +45,26 @@ const ForgotPassword = () => {
                 </p>
               </div>
               <div className="auth-card__actions">
-                <Link to="/login" className="btn btn--primary">
+                <Button to="/login" variant="primary">
                   Back to sign in
-                </Link>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="btn btn--ghost"
+                  variant="ghost"
                   onClick={() => send.reset()}
                 >
                   Use a different email
-                </button>
+                </Button>
               </div>
             </>
           ) : (
             <>
               <div className="auth-card__head">
                 <h1 id="auth-title">Reset your password</h1>
-                <p>Enter your email and we'll send you a link to choose a new one.</p>
+                <p>
+                  Enter your email and we'll send you a link to choose a new
+                  one.
+                </p>
               </div>
 
               {send.isError && (
@@ -78,9 +83,9 @@ const ForgotPassword = () => {
                   error={errors.email?.message}
                   {...register("email")}
                 />
-                <button type="submit" className="btn btn--primary">
+                <Button type="submit" variant="primary">
                   {send.isPending ? "Sending…" : "Send reset link"}
-                </button>
+                </Button>
               </form>
 
               <div className="auth-footer">

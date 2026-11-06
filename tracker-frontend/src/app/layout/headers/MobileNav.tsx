@@ -2,9 +2,10 @@ import { useCallback, useId, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import headerLinks from "@/constants/navLinks";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
 
+import Button from "@/shared/components/button";
 // Every destination in one flat list: on a phone there's no hover to reveal
 // the sub-links the desktop header shows.
 const links = headerLinks.flatMap(({ to, label, children }) => [
@@ -49,23 +50,19 @@ const MobileNav = () => {
           ))}
           {status === "unauthenticated" && (
             <div className="mobile-nav__actions">
-              <button
-                type="button"
-                className="btn"
-                onClick={() => navigate("/login")}
-              >
+              <Button type="button" onClick={() => navigate("/login")}>
                 Sign in
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                className="btn btn--primary"
+                variant="primary"
                 onClick={() => {
                   close();
                   void continueAsGuest();
                 }}
               >
                 Continue as guest
-              </button>
+              </Button>
             </div>
           )}
         </nav>

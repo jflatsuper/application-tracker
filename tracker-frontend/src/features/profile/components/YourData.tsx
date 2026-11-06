@@ -1,11 +1,21 @@
 import { useState } from "react";
 import { ApiError } from "@/shared/libs/apiClient";
-import { UNAVAILABLE_MESSAGE, isUnavailable } from "@/shared/libs/apiAvailability";
+import {
+  UNAVAILABLE_MESSAGE,
+  isUnavailable,
+} from "@/shared/libs/apiAvailability";
 import { retryHint } from "@/shared/libs/retryAfter";
-import Alert from "@/shared/components/Alert";
-import Input from "@/shared/components/form/Input";
+import Alert from "@/shared/components/alert";
+import Input from "@/shared/components/form/input";
 import { useDeleteAccount, useExportData } from "../hooks/useAccountData";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import {
+  PanelTitle,
+  PanelText,
+  PanelActions,
+} from "@/shared/components/panel/Panel";
 const CONFIRM_WORD = "DELETE";
 
 function failureMessage(error: unknown, fallback: string) {
@@ -31,12 +41,12 @@ const YourData = () => {
 
   return (
     <>
-      <section className="panel">
-        <h2 className="panel__title">Export your data</h2>
-        <p className="panel__text">
+      <Panel>
+        <PanelTitle>Export your data</PanelTitle>
+        <PanelText>
           Download your profile, settings, applications and their history as a
           JSON file.
-        </p>
+        </PanelText>
         {exportData.isError && (
           <Alert>
             {failureMessage(
@@ -45,25 +55,24 @@ const YourData = () => {
             )}
           </Alert>
         )}
-        <div className="panel__actions">
-          <button
+        <PanelActions>
+          <Button
             type="button"
-            className="btn"
             disabled={exportData.isPending}
             onClick={() => exportData.mutate()}
           >
             {exportData.isPending ? "Preparing…" : "Download my data"}
-          </button>
-        </div>
-      </section>
+          </Button>
+        </PanelActions>
+      </Panel>
 
-      <section className="panel panel--danger">
-        <h2 className="panel__title">Delete account</h2>
-        <p className="panel__text">
+      <Panel tone="danger">
+        <PanelTitle>Delete account</PanelTitle>
+        <PanelText>
           This permanently removes your account, applications and settings. It
           can't be undone. If you have a paid plan, cancel it first from
           Billing, and download your data above if you want a copy.
-        </p>
+        </PanelText>
 
         {deleteAccount.isError && (
           <Alert>
@@ -92,35 +101,31 @@ const YourData = () => {
               value={typed}
               onChange={(event) => setTyped(event.target.value)}
             />
-            <div className="panel__actions">
-              <button
+            <PanelActions>
+              <Button
                 type="submit"
-                className="btn btn--danger"
+                variant="danger"
                 disabled={typed !== CONFIRM_WORD || deleteAccount.isPending}
               >
                 {deleteAccount.isPending ? "Deleting…" : "Delete my account"}
-              </button>
-              <button
-                type="button"
-                className="btn btn--ghost"
-                onClick={stopConfirming}
-              >
+              </Button>
+              <Button type="button" variant="ghost" onClick={stopConfirming}>
                 Cancel
-              </button>
-            </div>
+              </Button>
+            </PanelActions>
           </form>
         ) : (
-          <div className="panel__actions">
-            <button
+          <PanelActions>
+            <Button
               type="button"
-              className="btn btn--danger"
+              variant="danger"
               onClick={() => setConfirming(true)}
             >
               Delete account…
-            </button>
-          </div>
+            </Button>
+          </PanelActions>
         )}
-      </section>
+      </Panel>
     </>
   );
 };

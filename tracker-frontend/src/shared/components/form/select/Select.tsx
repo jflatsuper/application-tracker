@@ -1,6 +1,6 @@
 import { forwardRef, useId } from "react";
-import FieldMessage from "./FieldMessage";
-import "./style.scss";
+import Field from "../field";
+import { describedBy } from "../field/describedBy";
 
 interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   dropdownOptions: { label: string; value: string | number }[];
@@ -9,32 +9,19 @@ interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   help?: string;
 }
 const Select = forwardRef<HTMLSelectElement, Props>(
-  (
-    { dropdownOptions, label, id, error, help, className, ...props },
-    ref,
-  ) => {
+  ({ dropdownOptions, label, id, error, help, className, ...props }, ref) => {
     const generatedId = useId();
     const selectId = id ?? generatedId;
-    const describedBy = error
-      ? `${selectId}-error`
-      : help
-        ? `${selectId}-help`
-        : undefined;
 
     return (
-      <div className="field">
-        {label && (
-          <label className="field__label" htmlFor={selectId}>
-            {label}
-          </label>
-        )}
+      <Field label={label} controlId={selectId} error={error} help={help}>
         <select
           {...props}
           id={selectId}
           ref={ref}
           className={["field__input", className].filter(Boolean).join(" ")}
           aria-invalid={error ? true : undefined}
-          aria-describedby={describedBy}
+          aria-describedby={describedBy(selectId, error, help)}
         >
           {dropdownOptions.map(({ value, label }) => (
             <option value={value} key={value}>
@@ -42,8 +29,7 @@ const Select = forwardRef<HTMLSelectElement, Props>(
             </option>
           ))}
         </select>
-        <FieldMessage baseId={selectId} error={error} help={help} />
-      </div>
+      </Field>
     );
   },
 );

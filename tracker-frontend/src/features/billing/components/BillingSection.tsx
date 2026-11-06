@@ -1,5 +1,4 @@
-import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import CancelSubscription from "@/features/billing/components/CancelSubscription";
 import PlanFeatures from "@/features/billing/components/PlanFeatures";
 import UpgradeButton from "@/features/billing/components/UpgradeButton";
@@ -11,6 +10,13 @@ import {
 import { useEntitlements, usePlans } from "@/features/billing/hooks/useBilling";
 import "@/features/billing/style.scss";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import {
+  PanelTitle,
+  PanelText,
+  PanelActions,
+} from "@/shared/components/panel/Panel";
 const BillingSection = () => {
   const { data, isPending, isError, refetch } = useEntitlements();
   const { data: plans } = usePlans();
@@ -18,30 +24,23 @@ const BillingSection = () => {
   const upgrades = data && plans ? upgradeTargets(plans, data.plan_code) : [];
 
   return (
-    <section className="panel" id="billing" aria-labelledby="billing-title">
-      <h2 id="billing-title" className="panel__title">
-        Plan
-      </h2>
+    <Panel id="billing" aria-labelledby="billing-title">
+      <PanelTitle id="billing-title">Plan</PanelTitle>
 
-      {isPending && (
-        <p className="panel__text" role="status">
-          Loading your plan…
-        </p>
-      )}
+      {isPending && <PanelText role="status">Loading your plan…</PanelText>}
 
       {isError && (
         <>
           <Alert>
             Couldn't load your plan. Check your connection and try again.
           </Alert>
-          <button
+          <Button
             type="button"
-            className="btn"
             style={{ alignSelf: "flex-start" }}
             onClick={() => refetch()}
           >
             Try again
-          </button>
+          </Button>
         </>
       )}
 
@@ -55,9 +54,7 @@ const BillingSection = () => {
               </span>
             )}
           </div>
-          {periodText(data) && (
-            <p className="panel__text">{periodText(data)}</p>
-          )}
+          {periodText(data) && <PanelText>{periodText(data)}</PanelText>}
 
           <h3 className="billing__subtitle">What's included</h3>
           <PlanFeatures entitlements={data.entitlements} />
@@ -76,17 +73,15 @@ const BillingSection = () => {
 
           <CancelSubscription billing={data} />
 
-          <p className="panel__text">
+          <PanelText>
             Updating payment details isn't available online yet.
-          </p>
-          <div className="panel__actions">
-            <Link to="/pricing" className="btn">
-              Compare plans
-            </Link>
-          </div>
+          </PanelText>
+          <PanelActions>
+            <Button to="/pricing">Compare plans</Button>
+          </PanelActions>
         </>
       )}
-    </section>
+    </Panel>
   );
 };
 

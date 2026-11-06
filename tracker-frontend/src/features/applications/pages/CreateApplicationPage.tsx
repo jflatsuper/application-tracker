@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import ParsePanel from "@/features/parser/components/ParsePanel";
 import ApplicationForm from "../components/ApplicationForm";
 import { useCreateApplication } from "../hooks/useApplicationMutations";
