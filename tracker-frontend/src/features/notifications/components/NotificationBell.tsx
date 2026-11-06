@@ -1,6 +1,6 @@
 import { useCallback, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
 import { useNotificationToasts } from "../hooks/useNotificationToasts";
 import { usePushState, useResyncPush } from "../hooks/usePush";

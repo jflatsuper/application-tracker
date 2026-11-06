@@ -3,18 +3,16 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Alert from "@/shared/components/Alert";
-import Input from "@/shared/components/form/Input";
+import Alert from "@/shared/components/alert";
+import Input from "@/shared/components/form/input";
 import { authApi } from "../api/authApi";
 import { authFlowErrorMessage } from "../errors";
 import { useAuth } from "../hooks/useAuth";
 import { looksLikeToken, readLinkToken } from "../linkToken";
-import {
-  resetPasswordSchema,
-  type ResetPasswordValues,
-} from "../authSchemas";
+import { resetPasswordSchema, type ResetPasswordValues } from "../authSchemas";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const ResetPassword = () => {
   const token = readLinkToken(useLocation());
   const { acceptSession } = useAuth();
@@ -48,14 +46,14 @@ const ResetPassword = () => {
           <div className="auth-card__head">
             <h1 id="auth-title">This link doesn't work</h1>
             <p>
-              The reset link is missing or incomplete. Request a new one and
-              use the link in the latest email.
+              The reset link is missing or incomplete. Request a new one and use
+              the link in the latest email.
             </p>
           </div>
           <div className="auth-card__actions">
-            <Link to="/forgot-password" className="btn btn--primary">
+            <Button to="/forgot-password" variant="primary">
               Request a new link
-            </Link>
+            </Button>
           </div>
         </>
       );
@@ -91,9 +89,9 @@ const ResetPassword = () => {
             error={errors.confirm?.message}
             {...register("confirm")}
           />
-          <button type="submit" className="btn btn--primary">
+          <Button type="submit" variant="primary">
             {reset.isPending ? "Saving…" : "Save new password"}
-          </button>
+          </Button>
         </form>
 
         {reset.isError && (

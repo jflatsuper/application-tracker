@@ -1,7 +1,7 @@
 import type { TableHeading, TableRowItem } from "@/types/table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
-import "./style.scss";
+import "./table.scss";
 type Props = {
   tableHeaders: TableHeading[];
   tableRowItems: TableRowItem[][];

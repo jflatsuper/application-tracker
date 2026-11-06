@@ -1,5 +1,4 @@
-import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
+import PageMeta from "@/shared/components/page-meta";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import PlanFeatures from "@/features/billing/components/PlanFeatures";
 import UpgradeButton from "@/features/billing/components/UpgradeButton";
@@ -7,6 +6,9 @@ import { upgradeTargets } from "@/features/billing/entitlements";
 import { useEntitlements, usePlans } from "@/features/billing/hooks/useBilling";
 import "@/features/billing/style.scss";
 
+import Button from "@/shared/components/button";
+import ErrorState from "@/shared/components/states/error-state";
+import LoadingState from "@/shared/components/states/loading-state";
 const PricingPage = () => {
   const { status } = useAuth();
   const signedIn = status === "authenticated";
@@ -20,28 +22,19 @@ const PricingPage = () => {
 
   return (
     <>
-      <title>Plans</title>
+      <PageMeta path="/pricing" />
       <section className="pricing">
         <header className="pricing__head">
           <h1>Plans</h1>
           <p>Compare what each plan includes.</p>
         </header>
 
-        {isPending && (
-          <p className="applications__state" role="status">
-            Loading plans…
-          </p>
-        )}
+        {isPending && <LoadingState>Loading plans…</LoadingState>}
 
         {isError && (
-          <div className="applications__stack">
-            <Alert>
-              Couldn't load the plans. Check your connection and try again.
-            </Alert>
-            <button type="button" className="btn" onClick={() => refetch()}>
-              Try again
-            </button>
-          </div>
+          <ErrorState onRetry={() => refetch()}>
+            Couldn't load the plans. Check your connection and try again.
+          </ErrorState>
         )}
 
         {plans && (
@@ -80,13 +73,9 @@ const PricingPage = () => {
 
         <div className="pricing__cta">
           {signedIn ? (
-            <Link to="/profile" className="btn">
-              Your plan and billing
-            </Link>
+            <Button to="/profile">Your plan and billing</Button>
           ) : (
-            <Link to="/login" className="btn">
-              Sign in
-            </Link>
+            <Button to="/login">Sign in</Button>
           )}
         </div>
         <p className="pricing__note">Pricing is shown at checkout.</p>

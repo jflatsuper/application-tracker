@@ -1,16 +1,18 @@
 import type { ReactNode } from "react";
+import PageMeta from "@/shared/components/page-meta";
 import "../style.scss";
 
 type Props = {
   title: string;
+  path: "/privacy" | "/terms";
   updated: string;
   intro?: string;
   children: ReactNode;
 };
 
-const LegalDocument = ({ title, updated, intro, children }: Props) => (
+const LegalDocument = ({ title, path, updated, intro, children }: Props) => (
   <>
-    <title>{title}</title>
+    <PageMeta path={path} />
     <article className="legal">
       <header className="legal__head">
         <h1>{title}</h1>

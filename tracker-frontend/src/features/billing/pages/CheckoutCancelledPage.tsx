@@ -1,7 +1,7 @@
-import { Link } from "react-router";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const CheckoutCancelledPage = () => (
   <>
     <title>Checkout cancelled</title>
@@ -16,12 +16,12 @@ const CheckoutCancelledPage = () => (
         again whenever you're ready.
       </p>
       <div className="result-page__actions">
-        <Link to="/pricing" className="btn btn--primary">
+        <Button to="/pricing" variant="primary">
           Back to plans
-        </Link>
-        <Link to="/profile/billing" className="btn btn--ghost">
+        </Button>
+        <Button to="/profile/billing" variant="ghost">
           View billing
-        </Link>
+        </Button>
       </div>
     </section>
   </>

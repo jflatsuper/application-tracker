@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
+
+import Alert from "@/shared/components/alert";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const FEATURES = [
   {
     title: "Nine clear statuses",
@@ -39,20 +40,18 @@ const Landing = () => {
       <div className="landing__hero">
         <h1>Keep every application in view</h1>
         <p>
-          Track roles from saved to offer, see where each one stands, and
-          never lose a follow-up.
+          Track roles from saved to offer, see where each one stands, and never
+          lose a follow-up.
         </p>
         {error && <Alert>{error}</Alert>}
         <div className="landing__actions">
-          <Link to="/register" className="btn btn--primary">
+          <Button to="/register" variant="primary">
             Create account
-          </Link>
-          <Link to="/login" className="btn">
-            Sign in
-          </Link>
-          <button type="button" className="btn btn--ghost" onClick={onGuest}>
+          </Button>
+          <Button to="/login">Sign in</Button>
+          <Button type="button" variant="ghost" onClick={onGuest}>
             Continue as guest
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -1,13 +1,18 @@
 import { useState } from "react";
-import Alert from "@/shared/components/Alert";
-import Select from "@/shared/components/form/Select";
-import Textarea from "@/shared/components/form/Textarea";
+import Alert from "@/shared/components/alert";
+import Select from "@/shared/components/form/select";
+import Textarea from "@/shared/components/form/textarea";
 import { formatDate } from "@/shared/libs/format";
 import type { CancelReason, EntitlementsRead } from "@/features/billing/types";
 import { CANCEL_REASONS, subscriptionAction } from "../entitlements";
-import { useCancelSubscription, useResumeSubscription } from "../hooks/useBilling";
+import {
+  useCancelSubscription,
+  useResumeSubscription,
+} from "../hooks/useBilling";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
+import { PanelText } from "@/shared/components/panel/Panel";
 const COMMENT_MAX = 500;
 
 const reasonOptions = [
@@ -33,27 +38,27 @@ const CancelSubscription = ({ billing }: { billing: EntitlementsRead }) => {
         {resume.isError && (
           <Alert>Couldn't resume your plan. Try again in a moment.</Alert>
         )}
-        <button
+        <Button
           type="button"
-          className="btn"
           aria-busy={resume.isPending}
           onClick={() => resume.mutate()}
         >
           {resume.isPending ? "Resuming…" : "Resume subscription"}
-        </button>
+        </Button>
       </div>
     );
   }
 
   if (!open) {
     return (
-      <button
+      <Button
         type="button"
-        className="btn btn--danger billing-action"
+        variant="danger"
+        className="billing-action"
         onClick={() => setOpen(true)}
       >
         Cancel subscription
-      </button>
+      </Button>
     );
   }
 
@@ -71,17 +76,13 @@ const CancelSubscription = ({ billing }: { billing: EntitlementsRead }) => {
         );
       }}
     >
-      <h3 className="billing__subtitle">
-        Cancel {billing.plan_name}?
-      </h3>
-      <p className="panel__text">
+      <h3 className="billing__subtitle">Cancel {billing.plan_name}?</h3>
+      <PanelText>
         {until
           ? `You'll keep ${billing.plan_name} until ${until}, then move to the free plan. You can resume any time before then.`
           : `You'll keep ${billing.plan_name} until the end of the current period. You can resume any time before then.`}
-      </p>
-      {cancel.isError && (
-        <Alert>Couldn't cancel. Try again in a moment.</Alert>
-      )}
+      </PanelText>
+      {cancel.isError && <Alert>Couldn't cancel. Try again in a moment.</Alert>}
       <Select
         label="Why are you leaving? (optional)"
         dropdownOptions={reasonOptions}
@@ -97,20 +98,12 @@ const CancelSubscription = ({ billing }: { billing: EntitlementsRead }) => {
         onChange={(event) => setComment(event.target.value)}
       />
       <div className="cancel-form__actions">
-        <button
-          type="submit"
-          className="btn btn--danger"
-          aria-busy={cancel.isPending}
-        >
+        <Button type="submit" variant="danger" aria-busy={cancel.isPending}>
           {cancel.isPending ? "Canceling…" : "Cancel subscription"}
-        </button>
-        <button
-          type="button"
-          className="btn btn--ghost"
-          onClick={() => setOpen(false)}
-        >
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
           Keep my plan
-        </button>
+        </Button>
       </div>
     </form>
   );

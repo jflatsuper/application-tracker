@@ -1,6 +1,6 @@
 import { forwardRef, useId } from "react";
-import FieldMessage from "./FieldMessage";
-import "./style.scss";
+import Field from "../field";
+import { describedBy } from "../field/describedBy";
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -12,19 +12,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
   ({ label, id, error, help, className, rows = 4, ...props }, ref) => {
     const generatedId = useId();
     const textareaId = id ?? generatedId;
-    const describedBy = error
-      ? `${textareaId}-error`
-      : help
-        ? `${textareaId}-help`
-        : undefined;
 
     return (
-      <div className="field">
-        {label && (
-          <label className="field__label" htmlFor={textareaId}>
-            {label}
-          </label>
-        )}
+      <Field label={label} controlId={textareaId} error={error} help={help}>
         <textarea
           {...props}
           id={textareaId}
@@ -34,10 +24,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
             .filter(Boolean)
             .join(" ")}
           aria-invalid={error ? true : undefined}
-          aria-describedby={describedBy}
+          aria-describedby={describedBy(textareaId, error, help)}
         />
-        <FieldMessage baseId={textareaId} error={error} help={help} />
-      </div>
+      </Field>
     );
   },
 );

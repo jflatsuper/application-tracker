@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import { ApiError } from "@/shared/libs/apiClient";
 import { formatDate } from "@/shared/libs/format";
 import ApplicationEditForm from "../components/ApplicationEditForm";
@@ -17,6 +17,12 @@ import {
 } from "../hooks/useApplicationMutations";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelTitle, PanelText } from "@/shared/components/panel/Panel";
+import EmptyState from "@/shared/components/states/empty-state";
+import ErrorState from "@/shared/components/states/error-state";
+import LoadingState from "@/shared/components/states/loading-state";
 const SAVE_ERROR = "Couldn't save. Check your connection and try again.";
 
 const EditApplicationPage = () => {
@@ -33,34 +39,30 @@ const EditApplicationPage = () => {
   const followUp = useAddFollowUp(applicationId);
 
   if (isPending) {
-    return (
-      <p className="applications__state" role="status">
-        Loading application…
-      </p>
-    );
+    return <LoadingState>Loading application…</LoadingState>;
   }
 
   if (isError) {
     const missing =
-      error instanceof ApiError && (error.status === 404 || error.status === 422);
+      error instanceof ApiError &&
+      (error.status === 404 || error.status === 422);
     return missing ? (
-      <div className="applications__empty">
+      <>
         <title>Application not found</title>
-        <h1>We can't find that application</h1>
-        <p>It may have been deleted, or the link may be wrong.</p>
-        <Link to="/applications" className="btn btn--primary">
-          Back to applications
-        </Link>
-      </div>
+        <EmptyState
+          heading="h1"
+          title="We can't find that application"
+          text="It may have been deleted, or the link may be wrong."
+        >
+          <Button to="/applications" variant="primary">
+            Back to applications
+          </Button>
+        </EmptyState>
+      </>
     ) : (
-      <div className="applications__stack">
-        <Alert>
-          Couldn't load this application. Check your connection and try again.
-        </Alert>
-        <button type="button" className="btn" onClick={() => refetch()}>
-          Try again
-        </button>
-      </div>
+      <ErrorState onRetry={() => refetch()}>
+        Couldn't load this application. Check your connection and try again.
+      </ErrorState>
     );
   }
 
@@ -70,10 +72,7 @@ const EditApplicationPage = () => {
     <>
       <title>{`${application.company_name} · ${application.title}`}</title>
       <section className="application-edit">
-        <nav
-          className="application-edit__crumbs"
-          aria-label="Breadcrumb"
-        >
+        <nav className="application-edit__crumbs" aria-label="Breadcrumb">
           <Link to="/applications">Applications</Link>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{application.company_name}</span>
@@ -104,8 +103,8 @@ const EditApplicationPage = () => {
           </div>
 
           <aside className="application-edit__side">
-            <section className="panel">
-              <h2 className="panel__title">Status</h2>
+            <Panel>
+              <PanelTitle>Status</PanelTitle>
               <ApplicationEventForm
                 key={application.status}
                 kind="status"
@@ -121,15 +120,15 @@ const EditApplicationPage = () => {
                   )
                 }
               />
-            </section>
+            </Panel>
 
-            <section className="panel">
-              <h2 className="panel__title">Follow-ups</h2>
-              <p className="panel__text">
+            <Panel>
+              <PanelTitle>Follow-ups</PanelTitle>
+              <PanelText>
                 {application.follow_up_at
                   ? `Next follow-up: ${formatDate(application.follow_up_at, { utc: true })}`
                   : "No follow-up scheduled."}
-              </p>
+              </PanelText>
               <ApplicationEventForm
                 kind="follow_up"
                 isSaving={followUp.isPending}
@@ -137,12 +136,12 @@ const EditApplicationPage = () => {
                   followUp.mutate(toEventFields(values), { onSuccess: done })
                 }
               />
-            </section>
+            </Panel>
 
-            <section className="panel">
-              <h2 className="panel__title">History</h2>
+            <Panel>
+              <PanelTitle>History</PanelTitle>
               <ApplicationHistory events={application.events} />
-            </section>
+            </Panel>
           </aside>
         </div>
       </section>

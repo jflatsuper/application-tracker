@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "@/shared/components/form/Input";
-import Select from "@/shared/components/form/Select";
-import Textarea from "@/shared/components/form/Textarea";
+import Input from "@/shared/components/form/input";
+import Select from "@/shared/components/form/select";
+import Textarea from "@/shared/components/form/textarea";
 import type { ApplicationStatus } from "../ApplicationSchema";
 import {
   applicationEventSchema,
@@ -11,6 +11,7 @@ import {
 } from "../applicationFormValues";
 import { STATUS_LABELS, STATUS_ORDER } from "../applicationStatus";
 
+import Button from "@/shared/components/button";
 type Props = {
   kind: "status" | "follow_up";
   currentStatus?: ApplicationStatus;
@@ -79,13 +80,13 @@ const ApplicationEventForm = ({
         error={errors.note?.message}
         {...register("note")}
       />
-      <button type="submit" className="btn btn--primary" aria-busy={isSaving}>
+      <Button type="submit" variant="primary" aria-busy={isSaving}>
         {isSaving
           ? "Saving…"
           : kind === "status"
             ? "Update status"
             : "Log follow-up"}
-      </button>
+      </Button>
     </form>
   );
 };

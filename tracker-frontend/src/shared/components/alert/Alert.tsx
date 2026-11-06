@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Icon from "./Icon";
+import Icon from "../icon";
 import "./alert.scss";
 
 const Alert = ({ children }: { children: ReactNode }) => (

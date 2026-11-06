@@ -1,10 +1,11 @@
-import { Link, useLocation } from "react-router";
-import Alert from "@/shared/components/Alert";
+import { useLocation } from "react-router";
+import Alert from "@/shared/components/alert";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { Plan } from "@/features/billing/types";
 import { useCheckout } from "../hooks/useBilling";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 type Props = {
   plan: Plan;
   guestLabel: string;
@@ -20,13 +21,9 @@ const UpgradeButton = ({ plan, guestLabel }: Props) => {
   const registered = status === "authenticated" && !!user && !user.is_anonymous;
   if (!registered) {
     return (
-      <Link
-        to="/register"
-        state={{ from: location }}
-        className="btn btn--primary"
-      >
+      <Button to="/register" state={{ from: location }} variant="primary">
         {guestLabel}
-      </Link>
+      </Button>
     );
   }
 
@@ -35,14 +32,14 @@ const UpgradeButton = ({ plan, guestLabel }: Props) => {
       {checkout.isError && (
         <Alert>Couldn't start checkout. Try again in a moment.</Alert>
       )}
-      <button
+      <Button
         type="button"
-        className="btn btn--primary"
+        variant="primary"
         aria-busy={checkout.isPending}
         onClick={() => checkout.mutate(plan.code)}
       >
         {checkout.isPending ? "Opening checkout…" : `Upgrade to ${plan.name}`}
-      </button>
+      </Button>
     </div>
   );
 };

@@ -1,0 +1,64 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+
+  &:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    text-decoration: none;
+  }
+}
+
+.btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+
+  &:hover {
+    border-color: var(--accent-hover);
+    background: var(--accent-hover);
+    color: var(--on-accent);
+  }
+}
+
+.btn--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.btn--danger {
+  border-color: var(--danger-border);
+  color: var(--danger);
+
+  &:hover {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+}
+
+@media (max-width: 640px) {
+  // Bigger touch targets.
+  .btn {
+    height: 44px;
+  }
+}
+
+// Compact, for tight spots such as banners.
+.btn--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+}

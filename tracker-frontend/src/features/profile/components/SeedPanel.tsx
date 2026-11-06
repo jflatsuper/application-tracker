@@ -13,6 +13,13 @@ import { DIGEST_SEED_COUNT } from "@/dev/seedDigestData";
 import { HISTORY_APPS, HISTORY_EVENTS } from "@/dev/seedHistoryData";
 import { settingsKeys } from "../hooks/useSettings";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import {
+  PanelTitle,
+  PanelText,
+  PanelActions,
+} from "@/shared/components/panel/Panel";
 const SeedPanel = () => {
   const queryClient = useQueryClient();
   const [seededCount, setSeededCount] = useState(() => readSeededIds().length);
@@ -84,64 +91,45 @@ const SeedPanel = () => {
     }, "Removing");
 
   return (
-    <section className="panel panel--dev">
-      <h2 className="panel__title">Sample data</h2>
-      <p className="panel__text">
-        Only shown in development. Adds sample applications to this account.
-        The history seed replays {HISTORY_EVENTS} dated events per application,
-        so the edit page's timeline is full. It makes a lot of requests, so
-        give it a moment.
-      </p>
-      <p className="panel__text">
+    <Panel tone="dev">
+      <PanelTitle>Sample data</PanelTitle>
+      <PanelText>
+        Only shown in development. Adds sample applications to this account. The
+        history seed replays {HISTORY_EVENTS} dated events per application, so
+        the edit page's timeline is full. It makes a lot of requests, so give it
+        a moment.
+      </PanelText>
+      <PanelText>
         The digest seed switches your email digest to daily in this device's
         timezone and adds {DIGEST_SEED_COUNT} applications whose follow-ups are
         due today, overdue or coming up. Removing the seeded data puts your
         digest settings back.
-      </p>
-      {status && (
-        <p className="panel__text" role="status">
-          {status}
-        </p>
-      )}
-      <div className="panel__actions">
-        <button
-          type="button"
-          className="btn btn--primary"
-          aria-busy={busy}
-          onClick={seed}
-        >
+      </PanelText>
+      {status && <PanelText role="status">{status}</PanelText>}
+      <PanelActions>
+        <Button type="button" variant="primary" aria-busy={busy} onClick={seed}>
           Seed 60 applications
-        </button>
-        <button
-          type="button"
-          className="btn"
-          aria-busy={busy}
-          onClick={seedHistory}
-        >
+        </Button>
+        <Button type="button" aria-busy={busy} onClick={seedHistory}>
           Seed {HISTORY_APPS} with {HISTORY_EVENTS} events each
-        </button>
-        <button
-          type="button"
-          className="btn"
-          aria-busy={busy}
-          onClick={seedDigest}
-        >
+        </Button>
+        <Button type="button" aria-busy={busy} onClick={seedDigest}>
           Seed digests due today
-        </button>
+        </Button>
         {(seededCount > 0 || hasBackup) && (
-          <button
+          <Button
             type="button"
-            className="btn btn--danger"
+            variant="danger"
             aria-busy={busy}
             onClick={remove}
           >
             {seededCount > 0
               ? `Remove ${seededCount} seeded`
               : "Restore digest settings"}
-          </button>
+          </Button>
         )}
-      </div>
-    </section>
+      </PanelActions>
+    </Panel>
   );
 };
 

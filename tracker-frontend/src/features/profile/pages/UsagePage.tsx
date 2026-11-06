@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import { useEntitlements } from "@/features/billing/hooks/useBilling";
 import StatusChip from "@/features/applications/components/StatusChip";
 import {
@@ -10,6 +10,9 @@ import { useAllApplications } from "@/features/applications/hooks/useApplication
 import { countByStatus } from "@/features/home/homeStats";
 import ProfileSection from "../components/ProfileSection";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelText, PanelTitle } from "@/shared/components/panel/Panel";
 const UsagePage = () => {
   const entitlements = useEntitlements();
   const applications = useAllApplications();
@@ -32,29 +35,27 @@ const UsagePage = () => {
           <Alert>
             Couldn't load your usage. Check your connection and try again.
           </Alert>
-          <button
+          <Button
             type="button"
-            className="btn profile__cta"
+            className="profile__cta"
             onClick={() => {
               entitlements.refetch();
               applications.refetch();
             }}
           >
             Try again
-          </button>
+          </Button>
         </>
       )}
 
       {isPending && !isError && (
-        <p className="panel__text" role="status">
-          Loading usage…
-        </p>
+        <PanelText role="status">Loading usage…</PanelText>
       )}
 
       {total !== undefined && entitlements.data && (
         <>
-          <section className="panel">
-            <h2 className="panel__title">Applications</h2>
+          <Panel>
+            <PanelTitle>Applications</PanelTitle>
             <p className="usage-figure">
               <span className="usage-figure__value">{total}</span>
               <span className="usage-figure__of">
@@ -72,17 +73,19 @@ const UsagePage = () => {
                 aria-valuemax={limit}
                 aria-valuenow={Math.min(total, limit)}
               >
-                <span style={{ width: `${Math.min(100, (total / limit) * 100)}%` }} />
+                <span
+                  style={{ width: `${Math.min(100, (total / limit) * 100)}%` }}
+                />
               </div>
             )}
-          </section>
+          </Panel>
 
-          <section className="panel">
-            <h2 className="panel__title">By status</h2>
+          <Panel>
+            <PanelTitle>By status</PanelTitle>
             {used.length === 0 ? (
-              <p className="panel__text">
+              <PanelText>
                 No applications yet. They'll be counted here once you add some.
-              </p>
+              </PanelText>
             ) : (
               <ul className="usage-statuses">
                 {used.map((status) => (
@@ -100,7 +103,7 @@ const UsagePage = () => {
                 ))}
               </ul>
             )}
-          </section>
+          </Panel>
         </>
       )}
     </ProfileSection>

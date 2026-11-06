@@ -1,4 +1,4 @@
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import { timeAgo } from "@/shared/libs/format";
 import { TONE_ICONS, describeNotification } from "../notificationText";
 import type { Notification } from "../types";

@@ -5,6 +5,7 @@ import LegalDocument from "../components/LegalDocument";
 const PrivacyPage = () => (
   <LegalDocument
     title="Privacy policy"
+    path="/privacy"
     updated="5 November 2026"
     intro="Refresha keeps track of the jobs you apply for. This page explains what we store about you, why, and the choices you have."
   >
@@ -13,8 +14,8 @@ const PrivacyPage = () => (
       <ul>
         <li>
           <strong>Account details.</strong> Your email address and, if you give
-          one, your name. If you sign in with Google or LinkedIn, we receive
-          the email and name that account shares with us. Guest accounts have
+          one, your name. If you sign in with Google or LinkedIn, we receive the
+          email and name that account shares with us. Guest accounts have
           neither.
         </li>
         <li>
@@ -23,8 +24,8 @@ const PrivacyPage = () => (
           changes and follow-ups.
         </li>
         <li>
-          <strong>Your settings.</strong> Follow-up interval, digest
-          preference and time zone.
+          <strong>Your settings.</strong> Follow-up interval, digest preference
+          and time zone.
         </li>
         <li>
           <strong>Notifications.</strong> The notices we send you and whether
@@ -77,8 +78,8 @@ const PrivacyPage = () => (
     <section>
       <h2>How long we keep it</h2>
       <p>
-        We keep your data while your account exists. Dismissed notifications
-        and applications you delete are removed from your account.
+        We keep your data while your account exists. Dismissed notifications and
+        applications you delete are removed from your account.
       </p>
     </section>
 

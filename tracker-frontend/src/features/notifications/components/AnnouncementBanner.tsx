@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import {
   useActiveAnnouncements,
   useDismissAnnouncement,
@@ -28,7 +28,9 @@ const AnnouncementBanner = () => {
 
   if (data.length === 0) return null;
 
-  const sorted = [...data].sort((a, b) => SEVERITY[a.level] - SEVERITY[b.level]);
+  const sorted = [...data].sort(
+    (a, b) => SEVERITY[a.level] - SEVERITY[b.level],
+  );
 
   return (
     <div className="announcements" data-expanded={expanded}>

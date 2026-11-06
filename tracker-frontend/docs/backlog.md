@@ -14,6 +14,7 @@ Not started. Roughly in the order they'd be worth doing.
 | Import and export applications as CSV | Export is already covered by "Export your data" (JSON). CSV is for spreadsheets. Import needs a bulk-create endpoint. |
 | Calendar / follow-up view | A month view of follow-up dates. `follow_up_at` is already on applications, so this can be built from the existing list endpoint. |
 | Changelog / "what's new" page | A static page, or driven by announcements. |
+| Full-body prerender of public pages | Today the build writes each public page's `<head>` (titles, descriptions, social tags). The page body is still drawn by JavaScript, which Google runs but some crawlers don't. Rendering the body too means server-rendering the landing, privacy, terms and contact pages and making the sign-in check not flash a skeleton over them. |
 | Offline and connection-lost page | There is a 404 page; there is no offline handling. |
 | Public landing or status page | Marketing page, separate from the signed-in home. |
 | Stronger delete confirmation for paid plans | Block, or warn with the plan name, when a subscription is active. Needs entitlements to be checked first. |

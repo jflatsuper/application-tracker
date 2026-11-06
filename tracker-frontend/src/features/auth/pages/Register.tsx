@@ -4,12 +4,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { authErrorMessage } from "@/features/auth/errors";
-import Input from "@/shared/components/form/Input";
-import Alert from "@/shared/components/Alert";
+import Input from "@/shared/components/form/input";
+import Alert from "@/shared/components/alert";
+import PageMeta from "@/shared/components/page-meta";
 import ProviderButtons from "../components/ProviderButtons";
 import { registerSchema, type RegisterValues } from "../authSchemas";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const Register = () => {
   const { status, user, register: signUp } = useAuth();
   const location = useLocation();
@@ -33,7 +35,11 @@ const Register = () => {
     if (isSubmitting) return;
     setFormError(null);
     try {
-      await signUp({ email, password, full_name: full_name?.trim() || undefined });
+      await signUp({
+        email,
+        password,
+        full_name: full_name?.trim() || undefined,
+      });
     } catch (error) {
       setFormError(authErrorMessage(error, "register"));
     }
@@ -41,7 +47,7 @@ const Register = () => {
 
   return (
     <>
-      <title>Create account</title>
+      <PageMeta path="/register" />
       <section className="auth-page" aria-labelledby="auth-title">
         <div className="auth-card">
           <div className="auth-card__head">
@@ -81,9 +87,9 @@ const Register = () => {
               error={errors.password?.message}
               {...register("password")}
             />
-            <button type="submit" className="btn btn--primary">
+            <Button type="submit" variant="primary">
               {isSubmitting ? "Creating account…" : "Create account"}
-            </button>
+            </Button>
           </form>
 
           <div className="auth-divider">or</div>
@@ -91,8 +97,7 @@ const Register = () => {
 
           <div className="auth-footer">
             <p className="auth-footer__legal">
-              By continuing you agree to our{" "}
-              <Link to="/terms">terms</Link> and{" "}
+              By continuing you agree to our <Link to="/terms">terms</Link> and{" "}
               <Link to="/privacy">privacy policy</Link>.
             </p>
             <p>

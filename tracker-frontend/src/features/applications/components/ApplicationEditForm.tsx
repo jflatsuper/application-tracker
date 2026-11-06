@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+
 import { toast } from "react-toastify";
-import Input from "@/shared/components/form/Input";
-import Textarea from "@/shared/components/form/Textarea";
+import Input from "@/shared/components/form/input";
+import Textarea from "@/shared/components/form/textarea";
 import type { ApplicationPatch, ApplicationRead } from "../ApplicationSchema";
 import {
   applicationEditSchema,
@@ -13,6 +13,9 @@ import {
   type EditValues,
 } from "../applicationFormValues";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelTitle, PanelActions } from "@/shared/components/panel/Panel";
 type Props = {
   application: ApplicationRead;
   isSaving: boolean;
@@ -40,8 +43,8 @@ const ApplicationEditForm = ({ application, isSaving, onSave }: Props) => {
   };
 
   return (
-    <form className="panel" noValidate onSubmit={handleSubmit(submit)}>
-      <h2 className="panel__title">Details</h2>
+    <Panel as="form" noValidate onSubmit={handleSubmit(submit)}>
+      <PanelTitle>Details</PanelTitle>
       <div className="form-grid">
         <Input
           label="Company"
@@ -106,15 +109,15 @@ const ApplicationEditForm = ({ application, isSaving, onSave }: Props) => {
           />
         </div>
       </div>
-      <div className="panel__actions">
-        <button type="submit" className="btn btn--primary" aria-busy={isSaving}>
+      <PanelActions>
+        <Button type="submit" variant="primary" aria-busy={isSaving}>
           {isSaving ? "Saving…" : "Save changes"}
-        </button>
-        <Link to="/applications" className="btn btn--ghost">
+        </Button>
+        <Button to="/applications" variant="ghost">
           Back to applications
-        </Link>
-      </div>
-    </form>
+        </Button>
+      </PanelActions>
+    </Panel>
   );
 };
 
