@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import type { IconName } from "@/assets/icons";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import "../style.scss";
 
 const STORAGE_KEY = "profile-nav-collapsed";
@@ -63,7 +63,10 @@ const ProfileLayout = () => {
           title={collapsed ? "Expand sidebar" : undefined}
           onClick={toggle}
         >
-          <Icon name={collapsed ? "chevrons-right" : "chevrons-left"} size={18} />
+          <Icon
+            name={collapsed ? "chevrons-right" : "chevrons-left"}
+            size={18}
+          />
           <span className="profile-nav__label">Collapse</span>
         </button>
       </aside>

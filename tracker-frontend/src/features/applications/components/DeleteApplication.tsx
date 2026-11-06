@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import { useDeleteApplication } from "../hooks/useApplicationMutations";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import {
+  PanelTitle,
+  PanelText,
+  PanelActions,
+} from "@/shared/components/panel/Panel";
 type Props = { id: string; name: string };
 
 const DeleteApplication = ({ id, name }: Props) => {
@@ -12,33 +19,38 @@ const DeleteApplication = ({ id, name }: Props) => {
 
   if (!confirming) {
     return (
-      <div className="panel panel--danger">
-        <h2 className="panel__title">Delete application</h2>
-        <p className="panel__text">
+      <Panel as="div" tone="danger">
+        <PanelTitle>Delete application</PanelTitle>
+        <PanelText>
           Removes {name} and its history. This can't be undone.
-        </p>
-        <button
+        </PanelText>
+        <Button
           type="button"
-          className="btn btn--danger"
+          variant="danger"
           onClick={() => setConfirming(true)}
         >
           Delete application
-        </button>
-      </div>
+        </Button>
+      </Panel>
     );
   }
 
   return (
-    <div className="panel panel--danger" role="alertdialog" aria-label="Confirm delete">
-      <h2 className="panel__title">Delete {name}?</h2>
-      <p className="panel__text">The application and its history will be gone.</p>
+    <Panel
+      as="div"
+      tone="danger"
+      role="alertdialog"
+      aria-label="Confirm delete"
+    >
+      <PanelTitle>Delete {name}?</PanelTitle>
+      <PanelText>The application and its history will be gone.</PanelText>
       {remove.isError && (
         <Alert>Couldn't delete it. Check your connection and try again.</Alert>
       )}
-      <div className="panel__actions">
-        <button
+      <PanelActions>
+        <Button
           type="button"
-          className="btn btn--danger"
+          variant="danger"
           aria-busy={remove.isPending}
           onClick={() =>
             remove.mutate(id, {
@@ -47,16 +59,16 @@ const DeleteApplication = ({ id, name }: Props) => {
           }
         >
           {remove.isPending ? "Deleting…" : "Yes, delete it"}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="btn btn--ghost"
+          variant="ghost"
           onClick={() => setConfirming(false)}
         >
           Keep it
-        </button>
-      </div>
-    </div>
+        </Button>
+      </PanelActions>
+    </Panel>
   );
 };
 

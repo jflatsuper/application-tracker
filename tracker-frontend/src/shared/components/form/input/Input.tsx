@@ -1,6 +1,6 @@
 import { forwardRef, useId } from "react";
-import FieldMessage from "./FieldMessage";
-import "./style.scss";
+import Field from "../field";
+import { describedBy } from "../field/describedBy";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -12,29 +12,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, id, error, help, className, ...props }, ref) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;
-    const describedBy = error
-      ? `${inputId}-error`
-      : help
-        ? `${inputId}-help`
-        : undefined;
 
     return (
-      <div className="field">
-        {label && (
-          <label className="field__label" htmlFor={inputId}>
-            {label}
-          </label>
-        )}
+      <Field label={label} controlId={inputId} error={error} help={help}>
         <input
           {...props}
           id={inputId}
           ref={ref}
           className={["field__input", className].filter(Boolean).join(" ")}
           aria-invalid={error ? true : undefined}
-          aria-describedby={describedBy}
+          aria-describedby={describedBy(inputId, error, help)}
         />
-        <FieldMessage baseId={inputId} error={error} help={help} />
-      </div>
+      </Field>
     );
   },
 );

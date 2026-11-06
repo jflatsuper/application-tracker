@@ -7,7 +7,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import AccountMenu from "./AccountMenu";
 import MobileNav from "./MobileNav";
 import NotificationBell from "@/features/notifications/components/NotificationBell";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 const DefaultHeader: FC = () => {
   return (
     <header className="default-header-nav">

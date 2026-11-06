@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import Alert from "@/shared/components/Alert";
-import Input from "@/shared/components/form/Input";
-import Textarea from "@/shared/components/form/Textarea";
+import Alert from "@/shared/components/alert";
+import Input from "@/shared/components/form/input";
+import Textarea from "@/shared/components/form/textarea";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useEntitlements } from "@/features/billing/hooks/useBilling";
 import { TEXT_MAX, TEXT_MIN } from "../api/parserApi";
@@ -17,6 +17,9 @@ import type { ParsedPosting } from "../types";
 import OwnKeyField from "./OwnKeyField";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import { PanelTitle, PanelText } from "@/shared/components/panel/Panel";
 type Props = { onParsed: (posting: ParsedPosting) => void };
 
 const isHttpUrl = (value: string) => {
@@ -48,9 +51,10 @@ const ParsePanel = ({ onParsed }: Props) => {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
-  const [filled, setFilled] = useState<{ count: number; confidence: number } | null>(
-    null,
-  );
+  const [filled, setFilled] = useState<{
+    count: number;
+    confidence: number;
+  } | null>(null);
 
   const ownKey = useOwnKey(user?.id);
   const parseUrl = useParseUrl();
@@ -104,18 +108,20 @@ const ParsePanel = ({ onParsed }: Props) => {
   };
 
   return (
-    <section className="panel parse-panel" aria-labelledby="parse-title">
+    <Panel className="parse-panel" aria-labelledby="parse-title">
       <div>
-        <h2 id="parse-title" className="panel__title">
-          Fill from a job posting
-        </h2>
-        <p className="panel__text">
+        <PanelTitle id="parse-title">Fill from a job posting</PanelTitle>
+        <PanelText>
           Paste a link or the posting text. You'll review everything before it
           is saved.
-        </p>
+        </PanelText>
       </div>
 
-      <div className="parse-methods" role="group" aria-label="Where to read from">
+      <div
+        className="parse-methods"
+        role="group"
+        aria-label="Where to read from"
+      >
         <button
           type="button"
           className="parse-method"
@@ -152,13 +158,13 @@ const ParsePanel = ({ onParsed }: Props) => {
             help="Free. Reads the page's own job posting data, with no AI involved."
           />
           <div className="parse-actions">
-            <button
+            <Button
               type="submit"
-              className="btn btn--primary"
+              variant="primary"
               aria-busy={parseUrl.isPending}
             >
               {parseUrl.isPending ? "Reading page…" : "Fetch details"}
-            </button>
+            </Button>
           </div>
         </form>
       ) : (
@@ -193,13 +199,13 @@ const ParsePanel = ({ onParsed }: Props) => {
                 </>
               )}
               <div className="parse-actions">
-                <button
+                <Button
                   type="submit"
-                  className="btn btn--primary"
+                  variant="primary"
                   aria-busy={active.isPending}
                 >
                   {active.isPending ? "Reading text…" : "Extract details"}
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -226,7 +232,7 @@ const ParsePanel = ({ onParsed }: Props) => {
               : `Filled in ${filled.count} ${filled.count === 1 ? "field" : "fields"}. Check them before saving.`}
         </p>
       )}
-    </section>
+    </Panel>
   );
 };
 

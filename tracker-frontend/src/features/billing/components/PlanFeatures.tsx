@@ -1,4 +1,4 @@
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import type { Entitlements } from "@/features/billing/types";
 import { featureRows } from "../entitlements";
 import "../style.scss";

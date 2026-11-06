@@ -1,9 +1,9 @@
-import { Link } from "react-router";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import { periodText } from "../entitlements";
 import { useAwaitSubscription } from "../hooks/useAwaitSubscription";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const CheckoutSuccessPage = () => {
   const { data, live, timedOut, isError, refetch } = useAwaitSubscription();
 
@@ -42,16 +42,16 @@ const CheckoutSuccessPage = () => {
         <h1 id="result-title">{status.title}</h1>
         <p className="result-page__text">{status.text}</p>
         <div className="result-page__actions">
-          <Link to="/applications" className="btn btn--primary">
+          <Button to="/applications" variant="primary">
             Go to applications
-          </Link>
-          <Link to="/profile/billing" className="btn btn--ghost">
+          </Button>
+          <Button to="/profile/billing" variant="ghost">
             View billing
-          </Link>
+          </Button>
           {isError && (
-            <button type="button" className="btn" onClick={() => refetch()}>
+            <Button type="button" onClick={() => refetch()}>
               Check again
-            </button>
+            </Button>
           )}
         </div>
       </section>

@@ -1,9 +1,8 @@
 // pages/applications/ApplicationsListPage.tsx
 import { Link, useSearchParams } from "react-router";
 import Table from "@/shared/components/table/Table";
-import Alert from "@/shared/components/Alert";
-import Icon from "@/shared/components/Icon";
-import Pagination from "@/shared/components/Pagination";
+import Icon from "@/shared/components/icon";
+import Pagination from "@/shared/components/pagination";
 import { formatDate } from "@/shared/libs/format";
 import type { TableHeading, TableRowItem } from "@/types/table";
 import { useApplications } from "../hooks/useApplicationQueries";
@@ -12,6 +11,10 @@ import { STATUS_LABELS, STATUS_ORDER } from "../applicationStatus";
 import StatusChip from "../components/StatusChip";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
+import EmptyState from "@/shared/components/states/empty-state";
+import ErrorState from "@/shared/components/states/error-state";
+import LoadingState from "@/shared/components/states/loading-state";
 const PAGE_SIZE = 20;
 
 const tableHeaders: TableHeading[] = [
@@ -38,7 +41,10 @@ function ApplicationsListPage() {
       offset: (page - 1) * PAGE_SIZE,
     });
 
-  const updateParams = (next: { status?: ApplicationStatus; page?: number }) => {
+  const updateParams = (next: {
+    status?: ApplicationStatus;
+    page?: number;
+  }) => {
     const params = new URLSearchParams();
     if (next.status) params.set("status", next.status);
     if (next.page && next.page > 1) params.set("page", String(next.page));
@@ -53,10 +59,7 @@ function ApplicationsListPage() {
     return [
       {
         label: (
-          <Link
-            to={`/applications/${application.id}`}
-            className="table__link"
-          >
+          <Link to={`/applications/${application.id}`} className="table__link">
             {application.company_name}
           </Link>
         ),
@@ -77,7 +80,8 @@ function ApplicationsListPage() {
         ? { label: applied, className: "table__cell--end cell-date" }
         : {
             label: "Not applied",
-            className: "table__cell--end table__cell--muted cell-date cell-date--empty",
+            className:
+              "table__cell--end table__cell--muted cell-date cell-date--empty",
           },
       {
         label: formatDate(application.updated_at),
@@ -89,59 +93,48 @@ function ApplicationsListPage() {
   const renderBody = () => {
     if (isError) {
       return (
-        <div className="applications__stack">
-          <Alert>
-            Couldn't load your applications. Check your connection and try
-            again.
-          </Alert>
-          <button type="button" className="btn" onClick={() => refetch()}>
-            Try again
-          </button>
-        </div>
+        <ErrorState onRetry={() => refetch()}>
+          Couldn't load your applications. Check your connection and try again.
+        </ErrorState>
       );
     }
 
     if (isPending) {
-      return (
-        <p className="applications__state" role="status">
-          Loading applications…
-        </p>
-      );
+      return <LoadingState>Loading applications…</LoadingState>;
     }
 
     if (total === 0) {
       return status ? (
-        <div className="applications__empty">
-          <h2>No {STATUS_LABELS[status].toLowerCase()} applications</h2>
-          <p>Nothing has this status right now.</p>
-          <button type="button" className="btn" onClick={() => updateParams({})}>
+        <EmptyState
+          title={`No ${STATUS_LABELS[status].toLowerCase()} applications`}
+          text="Nothing has this status right now."
+        >
+          <Button type="button" onClick={() => updateParams({})}>
             Show all applications
-          </button>
-        </div>
+          </Button>
+        </EmptyState>
       ) : (
-        <div className="applications__empty">
-          <h2>No applications yet</h2>
-          <p>Add the first one when you apply.</p>
-          <Link to="/applications/create" className="btn btn--primary">
+        <EmptyState
+          title="No applications yet"
+          text="Add the first one when you apply."
+        >
+          <Button to="/applications/create" variant="primary">
             Add application
-          </Link>
-        </div>
+          </Button>
+        </EmptyState>
       );
     }
 
     if (items.length === 0) {
       return (
-        <div className="applications__empty">
-          <h2>That page is empty</h2>
-          <p>There are no more applications after page {page - 1}.</p>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => updateParams({ status })}
-          >
+        <EmptyState
+          title="That page is empty"
+          text={`There are no more applications after page ${page - 1}.`}
+        >
+          <Button type="button" onClick={() => updateParams({ status })}>
             Back to the first page
-          </button>
-        </div>
+          </Button>
+        </EmptyState>
       );
     }
 
@@ -181,14 +174,15 @@ function ApplicationsListPage() {
             {data && (
               <p className="applications__sub">
                 {total} {total === 1 ? "application" : "applications"}
-                {status && ` with status ${STATUS_LABELS[status].toLowerCase()}`}
+                {status &&
+                  ` with status ${STATUS_LABELS[status].toLowerCase()}`}
               </p>
             )}
           </div>
-          <Link to="/applications/create" className="btn btn--primary">
+          <Button to="/applications/create" variant="primary">
             <Icon name="plus" />
             Add application
-          </Link>
+          </Button>
         </div>
 
         <div

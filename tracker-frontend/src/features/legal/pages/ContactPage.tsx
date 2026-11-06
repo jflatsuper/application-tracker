@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 import { SUPPORT_EMAIL } from "@/constants/site";
+import PageMeta from "@/shared/components/page-meta";
 import "../style.scss";
 
+import Button from "@/shared/components/button";
 const QUESTIONS = [
   {
     q: "I can't sign in.",
@@ -19,21 +21,21 @@ const QUESTIONS = [
 
 const ContactPage = () => (
   <>
-    <title>Contact</title>
+    <PageMeta path="/contact" />
     <section className="legal">
       <header className="legal__head">
         <h1>Contact</h1>
         <p className="legal__intro">
-          Questions, problems or something that doesn't look right? We'd like
-          to hear about it.
+          Questions, problems or something that doesn't look right? We'd like to
+          hear about it.
         </p>
       </header>
 
       {SUPPORT_EMAIL && (
         <p className="legal__contact">
-          <a className="btn btn--primary" href={`mailto:${SUPPORT_EMAIL}`}>
+          <Button variant="primary" href={`mailto:${SUPPORT_EMAIL}`}>
             Email {SUPPORT_EMAIL}
-          </a>
+          </Button>
         </p>
       )}
 

@@ -6,13 +6,14 @@ import {
 } from "../ApplicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
-import Input from "@/shared/components/form/Input";
-import Select from "@/shared/components/form/Select";
-import Textarea from "@/shared/components/form/Textarea";
+
+import Input from "@/shared/components/form/input";
+import Select from "@/shared/components/form/select";
+import Textarea from "@/shared/components/form/textarea";
 import { atNoonUtc } from "../applicationFormValues";
 import { STATUS_LABELS, STATUS_ORDER } from "../applicationStatus";
 import "../style.scss";
+import Button from "@/shared/components/button";
 type FormInputItem<T> = {
   label?: string;
   help?: string;
@@ -33,7 +34,14 @@ const formItems: FormInputItem<Application>[] = [
   { label: "Source", name: "source_url" },
   { label: "Status", name: "status", type: "select", options: statusOptions },
   { label: "Date applied", name: "applied_at", type: "date" },
-  { label: "Tier", name: "tier", type: "number", min: 0, max: 5, help: "From 0 to 5." },
+  {
+    label: "Tier",
+    name: "tier",
+    type: "number",
+    min: 0,
+    max: 5,
+    help: "From 0 to 5.",
+  },
   {
     label: "Follow up every (days)",
     name: "follow_up_interval_days",
@@ -132,16 +140,12 @@ const ApplicationForm = ({
         );
       })}
       <div className="application-form__actions">
-        <button
-          type="submit"
-          className="btn btn--primary"
-          aria-busy={isSaving}
-        >
+        <Button type="submit" variant="primary" aria-busy={isSaving}>
           {isSaving ? "Saving…" : "Save application"}
-        </button>
-        <Link to="/applications" className="btn btn--ghost">
+        </Button>
+        <Button to="/applications" variant="ghost">
           Cancel
-        </Link>
+        </Button>
       </div>
     </form>
   );

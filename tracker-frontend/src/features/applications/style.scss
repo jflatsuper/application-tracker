@@ -205,43 +205,6 @@ $statuses: saved, applied, screening, interviewing, offer, accepted, rejected,
   }
 }
 
-.applications__stack {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.applications__state {
-  padding: 48px 0;
-  color: var(--text-2);
-  text-align: center;
-}
-
-.applications__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 48px 24px;
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-card);
-  text-align: center;
-
-  h1,
-  h2 {
-    font-size: 16px;
-  }
-
-  p {
-    color: var(--text-2);
-  }
-
-  .btn {
-    margin-top: 8px;
-  }
-}
-
 .applications__table {
   transition: opacity var(--dur-base) var(--ease);
 

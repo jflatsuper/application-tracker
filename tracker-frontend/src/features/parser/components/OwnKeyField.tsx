@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Input from "@/shared/components/form/Input";
+import Input from "@/shared/components/form/input";
 import { lastFour, looksLikeAnthropicKey } from "../byok/keyStore";
 import type { useOwnKey } from "../hooks/useOwnKey";
 
+import Button from "@/shared/components/button";
 type Props = { ownKey: ReturnType<typeof useOwnKey> };
 
 const OwnKeyField = ({ ownKey }: Props) => {
@@ -15,20 +16,17 @@ const OwnKeyField = ({ ownKey }: Props) => {
       <div className="parse-key">
         <div className="parse-key__row">
           <span>
-            Using your Anthropic key ending <strong>{lastFour(ownKey.key)}</strong>
+            Using your Anthropic key ending{" "}
+            <strong>{lastFour(ownKey.key)}</strong>
             <span className="parse-key__where">
               {ownKey.location === "device"
                 ? " · saved on this device"
                 : " · this tab only"}
             </span>
           </span>
-          <button
-            type="button"
-            className="btn btn--danger"
-            onClick={() => ownKey.clear()}
-          >
+          <Button type="button" variant="danger" onClick={() => ownKey.clear()}>
             Remove key
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -36,7 +34,9 @@ const OwnKeyField = ({ ownKey }: Props) => {
 
   const save = () => {
     if (!looksLikeAnthropicKey(draft)) {
-      setError("That doesn't look like an Anthropic key. It starts with sk-ant-.");
+      setError(
+        "That doesn't look like an Anthropic key. It starts with sk-ant-.",
+      );
       return;
     }
     try {
@@ -44,7 +44,9 @@ const OwnKeyField = ({ ownKey }: Props) => {
       setDraft("");
       setError(null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Couldn't save the key.");
+      setError(
+        caught instanceof Error ? caught.message : "Couldn't save the key.",
+      );
     }
   };
 
@@ -69,9 +71,9 @@ const OwnKeyField = ({ ownKey }: Props) => {
         />
         Remember on this device
       </label>
-      <button type="button" className="btn" onClick={save}>
+      <Button type="button" onClick={save}>
         Save key
-      </button>
+      </Button>
     </div>
   );
 };

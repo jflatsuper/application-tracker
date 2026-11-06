@@ -1,6 +1,5 @@
-import { Link, useNavigate, useSearchParams } from "react-router";
-import Alert from "@/shared/components/Alert";
-import Pagination from "@/shared/components/Pagination";
+import { useNavigate, useSearchParams } from "react-router";
+import Pagination from "@/shared/components/pagination";
 import NotificationItem from "../components/NotificationItem";
 import {
   FEED_SIZE,
@@ -13,6 +12,10 @@ import { describeNotification } from "../notificationText";
 import type { Notification } from "../types";
 import "../components/style.scss";
 
+import Button from "@/shared/components/button";
+import EmptyState from "@/shared/components/states/empty-state";
+import ErrorState from "@/shared/components/states/error-state";
+import LoadingState from "@/shared/components/states/loading-state";
 const NotificationsPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,47 +45,37 @@ const NotificationsPage = () => {
   const renderBody = () => {
     if (isError) {
       return (
-        <div className="applications__stack">
-          <Alert>
-            Couldn't load your notifications. Check your connection and try
-            again.
-          </Alert>
-          <button type="button" className="btn" onClick={() => refetch()}>
-            Try again
-          </button>
-        </div>
+        <ErrorState onRetry={() => refetch()}>
+          Couldn't load your notifications. Check your connection and try again.
+        </ErrorState>
       );
     }
 
     if (isPending) {
-      return (
-        <p className="applications__state" role="status">
-          Loading notifications…
-        </p>
-      );
+      return <LoadingState>Loading notifications…</LoadingState>;
     }
 
     if (total === 0) {
       return (
-        <div className="applications__empty">
-          <h2>You're all caught up</h2>
-          <p>Reminders, digests and billing notices show up here.</p>
-          <Link to="/applications" className="btn">
-            Go to applications
-          </Link>
-        </div>
+        <EmptyState
+          title="You're all caught up"
+          text="Reminders, digests and billing notices show up here."
+        >
+          <Button to="/applications">Go to applications</Button>
+        </EmptyState>
       );
     }
 
     if (items.length === 0) {
       return (
-        <div className="applications__empty">
-          <h2>That page is empty</h2>
-          <p>There are no more notifications after page {page - 1}.</p>
-          <button type="button" className="btn" onClick={() => goToPage(1)}>
+        <EmptyState
+          title="That page is empty"
+          text={`There are no more notifications after page ${page - 1}.`}
+        >
+          <Button type="button" onClick={() => goToPage(1)}>
             Back to the first page
-          </button>
-        </div>
+          </Button>
+        </EmptyState>
       );
     }
 
@@ -124,18 +117,18 @@ const NotificationsPage = () => {
             <h1>Notifications</h1>
             {data && (
               <p className="applications__sub">
-                {unread > 0 ? `${unread} unread` : "All read"} · {total} in total
+                {unread > 0 ? `${unread} unread` : "All read"} · {total} in
+                total
               </p>
             )}
           </div>
-          <button
+          <Button
             type="button"
-            className="btn"
             disabled={unread === 0 || markRead.isPending}
             onClick={() => markRead.mutate(undefined)}
           >
             Mark all read
-          </button>
+          </Button>
         </div>
 
         {renderBody()}

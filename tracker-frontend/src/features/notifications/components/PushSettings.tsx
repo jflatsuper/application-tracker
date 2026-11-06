@@ -1,10 +1,13 @@
 import { toast } from "react-toastify";
-import {
-  useDisablePush,
-  useEnablePush,
-  usePushState,
-} from "../hooks/usePush";
+import { useDisablePush, useEnablePush, usePushState } from "../hooks/usePush";
 
+import Button from "@/shared/components/button";
+import Panel from "@/shared/components/panel";
+import {
+  PanelTitle,
+  PanelText,
+  PanelActions,
+} from "@/shared/components/panel/Panel";
 const MESSAGES = {
   unsupported: "This browser can't receive push notifications.",
   blocked:
@@ -22,15 +25,15 @@ const PushSettings = () => {
   if (!state) return null;
 
   return (
-    <section className="panel">
-      <h2 className="panel__title">Browser notifications</h2>
-      <p className="panel__text">{MESSAGES[state]}</p>
+    <Panel>
+      <PanelTitle>Browser notifications</PanelTitle>
+      <PanelText>{MESSAGES[state]}</PanelText>
       {(state === "off" || state === "on") && (
-        <div className="panel__actions">
+        <PanelActions>
           {state === "off" ? (
-            <button
+            <Button
               type="button"
-              className="btn btn--primary"
+              variant="primary"
               aria-busy={busy}
               disabled={busy}
               onClick={() =>
@@ -41,26 +44,24 @@ const PushSettings = () => {
               }
             >
               Turn on notifications
-            </button>
+            </Button>
           ) : (
-            <button
-                type="button"
-                className="btn"
-                aria-busy={busy}
-                disabled={busy}
-                onClick={() =>
-                  disable.mutate(undefined, {
-                    onSuccess: () => toast.success("Notifications turned off."),
-                  })
-                }
-              >
-                Turn off notifications
-              </button>
+            <Button
+              type="button"
+              aria-busy={busy}
+              disabled={busy}
+              onClick={() =>
+                disable.mutate(undefined, {
+                  onSuccess: () => toast.success("Notifications turned off."),
+                })
+              }
+            >
+              Turn off notifications
+            </Button>
           )}
-        </div>
+        </PanelActions>
       )}
-
-    </section>
+    </Panel>
   );
 };
 

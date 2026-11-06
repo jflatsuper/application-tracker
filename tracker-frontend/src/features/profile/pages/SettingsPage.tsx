@@ -1,9 +1,11 @@
-import Alert from "@/shared/components/Alert";
+import Alert from "@/shared/components/alert";
 import PushSettings from "@/features/notifications/components/PushSettings";
 import ProfileSection from "../components/ProfileSection";
 import SettingsForm from "../components/SettingsForm";
 import { useSettings } from "../hooks/useSettings";
 
+import Button from "@/shared/components/button";
+import { PanelText } from "@/shared/components/panel/Panel";
 const SettingsPage = () => {
   const { data, isPending, isError, refetch } = useSettings();
 
@@ -12,24 +14,20 @@ const SettingsPage = () => {
       title="Settings"
       description="Reminders, your email digest and your timezone."
     >
-      {isPending && (
-        <p className="panel__text" role="status">
-          Loading your settings…
-        </p>
-      )}
+      {isPending && <PanelText role="status">Loading your settings…</PanelText>}
 
       {isError && (
         <>
           <Alert>
             Couldn't load your settings. Check your connection and try again.
           </Alert>
-          <button
+          <Button
             type="button"
-            className="btn profile__cta"
+            className="profile__cta"
             onClick={() => refetch()}
           >
             Try again
-          </button>
+          </Button>
         </>
       )}
 

@@ -1,14 +1,14 @@
-import Icon from "@/shared/components/Icon";
-import "@/app/layout/style.scss";
-import "@/app/layout/headers/style.scss";
-import "./authLoading.scss";
+import Icon from "@/shared/components/icon";
+import "./style.scss";
+import "./headers/style.scss";
+import "./appLoading.scss";
 
 const NAV_PLACEHOLDERS = [56, 96, 72, 64];
 
 // The app shell with placeholders where the account area and page content
 // will be, shown while the session is being checked. It sits outside the
 // router and the auth context, so it uses plain markup (no links).
-function AuthLoading() {
+function AppLoading() {
   return (
     <div className="base-layout" role="status" aria-live="polite">
       <span className="visually-hidden">Loading your account…</span>
@@ -49,4 +49,4 @@ function AuthLoading() {
   );
 }
 
-export default AuthLoading;
+export default AppLoading;

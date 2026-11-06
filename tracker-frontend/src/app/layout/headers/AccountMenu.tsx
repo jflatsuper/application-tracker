@@ -2,7 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { UserRead } from "@/features/auth/types";
-import Icon from "@/shared/components/Icon";
+import Icon from "@/shared/components/icon";
 import { useDismissOnOutside } from "@/shared/hooks/useDismissOnOutside";
 
 const initialsOf = (label: string) =>
