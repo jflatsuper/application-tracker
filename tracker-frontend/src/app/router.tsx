@@ -10,6 +10,7 @@ import Register from "@/features/auth/pages/Register";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 import VerifyEmail from "@/features/auth/pages/VerifyEmail";
 import { SUPPORT_EMAIL } from "@/constants/site";
+import ExtensionConnectPage from "@/features/extension/pages/ExtensionConnectPage";
 import ContactPage from "@/features/legal/pages/ContactPage";
 import PrivacyPage from "@/features/legal/pages/PrivacyPage";
 import TermsPage from "@/features/legal/pages/TermsPage";
@@ -62,6 +63,7 @@ export const router = createBrowserRouter([
                 ],
               },
               { path: "notifications", element: <NotificationsPage /> },
+              { path: "extension/connect", element: <ExtensionConnectPage /> },
               // Where the payment provider sends people back after checkout.
               { path: "billing/success", element: <CheckoutSuccessPage /> },
               { path: "billing/cancelled", element: <CheckoutCancelledPage /> },

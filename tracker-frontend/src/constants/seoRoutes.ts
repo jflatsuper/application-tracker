@@ -9,4 +9,5 @@ export const PRIVATE_PATHS = [
   "/reset-password",
   "/verify-email",
   "/auth/",
+  "/extension/",
 ];
