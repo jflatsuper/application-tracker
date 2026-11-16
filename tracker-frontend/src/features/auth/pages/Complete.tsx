@@ -2,6 +2,7 @@
 import { refreshAccessToken } from "@/shared/libs/apiClient";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { takeReturnTo } from "../returnTo";
 
 export function AuthComplete() {
   const navigate = useNavigate();
@@ -9,7 +10,9 @@ export function AuthComplete() {
   useEffect(() => {
     // The backend set the refresh cookie; trade it for an access token.
     refreshAccessToken().then((ok) =>
-      navigate(ok ? "/" : "/login?error=signin_failed", { replace: true }),
+      navigate(ok ? (takeReturnTo() ?? "/") : "/login?error=signin_failed", {
+        replace: true,
+      }),
     );
   }, [navigate]);
 

@@ -36,9 +36,9 @@ function Login() {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) });
 
-  const from =
-    (location.state as { from?: { pathname: string } } | null)?.from
-      ?.pathname ?? "/applications";
+  const sentFrom = (location.state as { from?: { pathname: string } } | null)
+    ?.from?.pathname;
+  const from = sentFrom ?? "/applications";
 
   if (status === "authenticated" && user && !user.is_anonymous) {
     return <Navigate to={from} replace />;
@@ -108,7 +108,7 @@ function Login() {
           </form>
 
           <div className="auth-divider">or</div>
-          <ProviderButtons verb="Continue with" />
+          <ProviderButtons verb="Continue with" returnTo={sentFrom} />
 
           <div className="auth-footer">
             <p>
