@@ -7,6 +7,7 @@
 //   - manifest.json, icons/
 import react from "@vitejs/plugin-react";
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build, loadEnv } from "vite";
@@ -14,6 +15,9 @@ import { SITE_PATTERNS } from "./sites.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = resolve(root, "dist");
+// `npm run build:store`: the Chrome Web Store rejects a manifest with a "key",
+// so this build never writes one, whatever .env says, and zips the result.
+const forStore = process.argv.includes("--store");
 const env = loadEnv("production", root, "VITE_");
 const clean = (value, fallback) =>
   (value?.trim() || fallback).replace(/\/+$/, "");
@@ -87,8 +91,8 @@ const manifest = {
   externally_connectable: {
     matches: [`${appOrigin.protocol}//${appOrigin.hostname}/*`],
   },
-  // Pins the extension's ID (see .env.example). Leave unset for the Web Store.
-  ...(env.VITE_EXTENSION_KEY?.trim()
+  // Pins the extension's ID (see .env.example). Never in a store build.
+  ...(!forStore && env.VITE_EXTENSION_KEY?.trim()
     ? { key: env.VITE_EXTENSION_KEY.trim() }
     : {}),
 };
@@ -97,3 +101,11 @@ mkdirSync(resolve(dist, "icons"), { recursive: true });
 cpSync(resolve(root, "icons"), resolve(dist, "icons"), { recursive: true });
 
 console.log(`Built ${dist}\n  API: ${apiBase}\n  App: ${appUrl}`);
+
+if (forStore) {
+  const zip = resolve(root, `refresha-${pkg.version}.zip`);
+  rmSync(zip, { force: true });
+  // Files at the zip's top level, as the store requires.
+  execFileSync("zip", ["-r", "-q", zip, "."], { cwd: dist });
+  console.log(`  Store package: ${zip}`);
+}
